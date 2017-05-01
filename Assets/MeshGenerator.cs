@@ -6,7 +6,23 @@ public class MeshGenerator : MonoBehaviour {
     public SquareGrid squareGrid;
 
     public void GenerateMesh(int[,] map, float squareSize) {
-        squareGrid = new SquareGrid(map, squareSize);
+        int[,] newMap = Generate2DMap(map);
+        squareGrid = new SquareGrid(newMap, squareSize);
+    }
+
+    int[,] Generate2DMap(int[,] map) {
+        int[,] newmap = new int[map.GetLength(0), map.GetLength(1)];
+        for (int x = 0; x < map.GetLength(0); x++) {
+            for (int y = 0; y < map.GetLength(1); y++) {
+                if (map[x, y] > 0) {
+                    newmap[x, y] = 1;
+                } else {
+                    newmap[x, y] = 0;
+                }
+            }
+        }
+
+        return newmap;
     }
 
     void OnDrawGizmos() {
