@@ -58,9 +58,6 @@ public class mapGenerator : MonoBehaviour {
 
             }
         }
-
-
-
     }
 
     void RandomFillMap() {
