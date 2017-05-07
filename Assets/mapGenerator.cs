@@ -12,6 +12,9 @@ public class mapGenerator : MonoBehaviour {
 
     public int average_depth = 3;
 
+    [Range(0, 1)]
+    public float water_surface_percent = 0.71f;
+
     int[,] map;
     //int[] heightMap;
 
@@ -28,32 +31,29 @@ public class mapGenerator : MonoBehaviour {
         if (Input.GetMouseButton(0)) {
             //GenerateMap();
             BlastRandomHoles(1);
-            while (WaterCount() > average_depth * width * length)
-            {
-                WaterDrain(1);
-            }
+            updateWater();
         }
         bomber_x += (int)Input.GetAxis("Horizontal");
         bomber_y += (int)Input.GetAxis("Vertical");
         if (Input.GetKeyDown("space"))
         {
             BlastClean(bomber_x, bomber_y, 10, 1);
-            while (WaterCount() > average_depth * width * length)
-            {
-                WaterDrain(1);
-            }
+            updateWater();
         }
     }
-
+    void updateWater()
+    {
+        //while (WaterCount() > average_depth * width * length)
+        while (WaterSurfaceCount() > water_surface_percent * width * length)
+        {
+            WaterDrain(1);
+        }
+    }
     void GenerateMap() {
         map = new int[width, length];
         //RandomFillMap();
         BlastRandomHoles(start_pits);
-
-        while (WaterCount() > average_depth * width * length)
-        {
-            WaterDrain(1);
-        }
+        updateWater();
 
         //RaiseLand();
 
@@ -143,7 +143,7 @@ public class mapGenerator : MonoBehaviour {
         }
     }
 
-    int WaterCount()
+    int WaterCount()    //count volume of water
     {
         int volume = 0;
         for (int x = 0; x < width; x++)
@@ -159,9 +159,25 @@ public class mapGenerator : MonoBehaviour {
         return volume;
     }
 
+    int WaterSurfaceCount()   //count surface area of water
+    {
+        int water = 0;
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < length; y++)
+            {
+                if (map[x, y] < 0)
+                {
+                    water += 1;
+                }
+            }
+        }
+        return water;
+    }
+
     void WaterDrain(int amount)
     {
-        print("Water amount is: " + WaterCount());
+        //print("Water amount is: " + WaterCount());
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < length; y++)
@@ -230,7 +246,6 @@ public class mapGenerator : MonoBehaviour {
 
 
     void OnDrawGizmos() {
-
         if (map != null) {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < length; y++) {
@@ -240,20 +255,21 @@ public class mapGenerator : MonoBehaviour {
                     if (height < 0)
                     {
                         //Gizmos.color = Color.blue;
-                        Gizmos.color = new Color(col, 1+(float)height/15, 1f, 1f);
+                        Gizmos.color = new Color(col, 1 + (float)height / 15, 1f, 1f);
                     }
                     else
-                        Gizmos.color = new Color(col, 1f, 0f, 1f);
-                    Vector3 pos = new Vector3(-width / 2 + x + .5f, height, -length / 2 + y + .5f);
-                    //Vector3 pos = new Vector3(-width / 2 + x + .5f, 0, -length / 2 + y + .5f);
-                    Gizmos.DrawCube(pos, Vector3.one);
+                        //Gizmos.color = new Color(col, 1f, 0f, 1f);
+                        Gizmos.color = new Color((float)height / 5, 1f, 0f);
+                    //Vector3 pos = new Vector3(-width / 2 + x + .5f, height, -length / 2 + y + .5f);
+                    //Gizmos.DrawCube(pos, Vector3.one);
+                    Vector3 pos = new Vector3(-width / 2 + x + .5f, height/2, -length / 2 + y + .5f);
+                    Vector3 scale = new Vector3(1, height, 1);
+                    Gizmos.DrawCube(pos, scale);
                 }
             }
             int me_z = map[bomber_x, bomber_y] + 1;
             Gizmos.color = Color.red;
             Gizmos.DrawCube(new Vector3(-width / 2 + bomber_x + .5f, me_z, - length / 2 + bomber_y + .5f), Vector3.one);
         }
-
     }
-
 }
