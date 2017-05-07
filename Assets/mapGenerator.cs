@@ -6,36 +6,53 @@ using System.Collections.Generic;
 
 public class mapGenerator : MonoBehaviour {
 
-    public int width;
-    public int length;
+    public int width = 100;
+    public int length = 100;
+    public int start_pits = 20;
 
-    public string seed;
-    public bool useRandomSeed;
-
-    [Range(0, 100)]
-    public int randomFillPercent;
+    public int average_depth = 3;
 
     int[,] map;
     //int[] heightMap;
 
-    Dictionary<int[,], int> elevation;
+    int bomber_x = 0;
+    int bomber_y = 0;
+
+    System.Random random = new System.Random();
 
     void Start() {
         GenerateMap();
     }
 
     void Update() {
-        if (Input.GetMouseButtonDown(0)) {
-            GenerateMap();
+        if (Input.GetMouseButton(0)) {
+            //GenerateMap();
+            BlastRandomHoles(1);
+            while (WaterCount() > average_depth * width * length)
+            {
+                WaterDrain(1);
+            }
+        }
+        bomber_x += (int)Input.GetAxis("Horizontal");
+        bomber_y += (int)Input.GetAxis("Vertical");
+        if (Input.GetKeyDown("space"))
+        {
+            BlastClean(bomber_x, bomber_y, 10, 1);
+            while (WaterCount() > average_depth * width * length)
+            {
+                WaterDrain(1);
+            }
         }
     }
 
     void GenerateMap() {
         map = new int[width, length];
-        RandomFillMap();
+        //RandomFillMap();
+        BlastRandomHoles(start_pits);
 
-        for (int i = 0; i < 5; i++) {
-            //SmoothMap();
+        while (WaterCount() > average_depth * width * length)
+        {
+            WaterDrain(1);
         }
 
         //RaiseLand();
@@ -43,29 +60,118 @@ public class mapGenerator : MonoBehaviour {
         MeshGenerator meshGen = GetComponent<MeshGenerator>();
         //meshGen.GenerateMesh(map, 1);
     }
-
-    private void RaiseLand() {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < length; y++) {
-                if (map[x, y] == 1) {
-
-                    //elevation.Add(x, y, 1);
-
+    void BlastRandomHoles(int count)
+    {
+        while (count > 0)
+        {
+            int radius = random.Next(3, 30);
+            BlastHole(random.Next(-radius, width+radius), random.Next(-radius, length+radius), radius, 0.5f);
+            //BlastClean(random.Next(-radius, width + radius), random.Next(-radius, length + radius), radius, 0.5f);
+            count--;
+        }
+    }
+    void BlastHole(int x, int y, float radius, float depth)//subtracts from all area within the circle. explosion is a infinitely tall cone
+    {
+        int rad = (int)radius;
+        for (int i = Mathf.Max(x-rad, 0); i< Mathf.Min(x+rad, width); i++)//iterates through with i starting at 0 or greater
+        {
+            for (int j = Mathf.Max(y -rad, 0); j < Mathf.Min(y + rad, length); j++)
+            {   //distance from epicenter
+                float distance = Mathf.Sqrt(Mathf.Pow(Mathf.Abs(i - x), 2f) + Mathf.Pow(Mathf.Abs(j - y), 2f));
+                if (distance <= radius)
+                {
+                    int destruction = (int)((radius - distance) * depth);
+                    map[i, j] -= destruction;
                 }
-                if (map[x, y] == 0) {
-                    //elevation.Add(x, y, 0);
+
+            }
+        }
+    }
+    void BlastCleanish(int x, int y, float radius, float depth)//leaves a hole with a particular 3d shape. explosion has a height.
+    {
+        depth = depth * 3; //because i'm too lazy to change the code where it's called
+        float blast_weight = .5f;   //how powerfully does the blast leave its particular shape?
+        int rad = (int)radius;
+        int z;
+        if (x >= 0 && x < width && y >= 0 && y < length)
+        {
+            z = map[x, y];
+        }
+        else { z = 0; }
+        for (int i = Mathf.Max(x - rad, 0); i < Mathf.Min(x + rad, width); i++)//iterates through with i starting at 0 or greater
+        {
+            for (int j = Mathf.Max(y - rad, 0); j < Mathf.Min(y + rad, length); j++)
+            {   //distance from epicenter
+                float distance = Mathf.Sqrt(Mathf.Pow(Mathf.Abs(i - x), 2f) + Mathf.Pow(Mathf.Abs(j - y), 2f));
+                if (distance <= radius)
+                {
+                    int destruction = (int)((radius - distance) * depth);
+                    if (map[i, j] > z - destruction)
+                        { map[i, j] = (int)Mathf.Lerp(z - destruction, map[i, j], blast_weight); } //interpolates between old height and blast shape height
+                }
+
+            }
+        }
+    }
+    void BlastClean(int x, int y, float radius, float depth)//leaves a hole with a sphere shape
+                                                             //simulation of a clean hole and then falling sand
+    {
+        int rad = (int)radius;
+        int z;
+        if (x >= 0 && x < width && y >= 0 && y < length)
+        {
+            z = map[x, y];
+        }
+        else { z = 0; }
+        for (int i = Mathf.Max(x - rad, 0); i < Mathf.Min(x + rad, width); i++)//iterates through with i starting at 0 or greater
+        {
+            for (int j = Mathf.Max(y - rad, 0); j < Mathf.Min(y + rad, length); j++)
+            {   //distance from epicenter
+                float distance = Mathf.Sqrt(Mathf.Pow(Mathf.Abs(i - x), 2f) + Mathf.Pow(Mathf.Abs(j - y), 2f));
+                if (distance <= radius)
+                {
+                    int destruction = (int)(Math.Sqrt((radius*radius - distance*distance)) * depth);//sphere rather than cone
+                    if (map[i, j] > z+destruction)
+                    {
+                        map[i, j] -= destruction*2;
+                    }
+                    else if (map[i, j] > z - destruction)
+                    { map[i, j] = z - destruction; }
                 }
 
             }
         }
     }
 
-    void RandomFillMap() {
-        if (useRandomSeed) {
-            seed = Time.time.ToString();
+    int WaterCount()
+    {
+        int volume = 0;
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < length; y++)
+            {
+                if (map[x, y] < 0)
+                {
+                    volume += -map[x,y];
+                }
+            }
         }
+        return volume;
+    }
 
-        System.Random pseudoRandom = new System.Random(seed.GetHashCode());
+    void WaterDrain(int amount)
+    {
+        print("Water amount is: " + WaterCount());
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < length; y++)
+            {
+                map[x, y] += amount;
+            }
+        }
+    }
+
+    void RandomFillMap() {
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < length; y++) {
@@ -73,9 +179,21 @@ public class mapGenerator : MonoBehaviour {
                    // map[x, y] = 1;
                 //} else {
                     //map[x, y] = (pseudoRandom.Next(0, 100) < randomFillPercent) ? 1 : 0;
-                   map[x, y] = (pseudoRandom.Next(-10, 10));
+                   map[x, y] = (random.Next(-10, 10));
                    
                 
+            }
+        }
+    }
+    void FlattenMap()
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < length; y++)
+            {
+                map[x, y] = 0;
+
+
             }
         }
     }
@@ -118,13 +236,22 @@ public class mapGenerator : MonoBehaviour {
                 for (int y = 0; y < length; y++) {
                     //Gizmos.color = (map[x, y] == 1) ? Color.black : Color.white;
                     int height = map[x, y];
-                    float col = ((float)height + 10) / 20;
-                    Gizmos.color = new Color(col, col, 1f, 1f);
+                    float col = ((float)height + 10) / 15;
+                    if (height < 0)
+                    {
+                        //Gizmos.color = Color.blue;
+                        Gizmos.color = new Color(col, 1+(float)height/15, 1f, 1f);
+                    }
+                    else
+                        Gizmos.color = new Color(col, 1f, 0f, 1f);
                     Vector3 pos = new Vector3(-width / 2 + x + .5f, height, -length / 2 + y + .5f);
                     //Vector3 pos = new Vector3(-width / 2 + x + .5f, 0, -length / 2 + y + .5f);
                     Gizmos.DrawCube(pos, Vector3.one);
                 }
             }
+            int me_z = map[bomber_x, bomber_y] + 1;
+            Gizmos.color = Color.red;
+            Gizmos.DrawCube(new Vector3(-width / 2 + bomber_x + .5f, me_z, - length / 2 + bomber_y + .5f), Vector3.one);
         }
 
     }
