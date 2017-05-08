@@ -46,8 +46,8 @@ public class landMassGeneration : MonoBehaviour {
             }
         }
 
-        meshGenerator meshGen = GetComponent<meshGenerator>();
-        meshGen.GenerateMesh(borderedMap, 1);
+        MeshGenerator meshGen = GetComponent<MeshGenerator>();
+        //meshGen.GenerateMesh(borderedMap, 1);
     }
 
 

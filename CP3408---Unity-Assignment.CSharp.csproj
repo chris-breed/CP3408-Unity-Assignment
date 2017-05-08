@@ -78,10 +78,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\1\landMassGeneration.cs" />
-    <Compile Include="Assets\1\meshGenerator.cs" />
-    <Compile Include="Assets\MeshGenerator.cs" />
-    <Compile Include="Assets\mapGenerator.cs" />
+    <Compile Include="Assets\1\MeshGenAll.cs" />
+    <Compile Include="Assets\1\MeshGenerator.cs" />
+    <Compile Include="Assets\MapGenerator.cs" />
+    <Compile Include="Assets\MeshGenOne.cs" />
+    <Compile Include="Assets\landMassGeneration.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

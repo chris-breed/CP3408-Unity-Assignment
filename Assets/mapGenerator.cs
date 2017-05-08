@@ -4,7 +4,7 @@ using System;
 using Boo.Lang;
 using System.Collections.Generic;
 
-public class mapGenerator : MonoBehaviour {
+public class MapGenerator : MonoBehaviour {
 
     public int width = 100;
     public int length = 100;
@@ -14,16 +14,29 @@ public class mapGenerator : MonoBehaviour {
 
     [Range(0, 1)]
     public float water_surface_percent = 0.71f;
-
+    public GameObject mesh_prefab;
+    public GameObject wall_mesh_prefab;
     int[,] map;
-    //int[] heightMap;
 
     int bomber_x = 0;
     int bomber_y = 0;
 
     System.Random random = new System.Random();
 
+    //MeshGenAll[] meshMap;
+
     void Start() {
+        //meshMap = new MeshGenAll[20];
+        //for (int i = 0; i < meshMap.Length; i++)
+        for (int i = 0; i < 20; i++)
+            {
+            //MeshGenAll meshGen = gameObject.AddComponent<MeshGenAll>();
+            //meshGen.GenerateMesh(map, 1);
+            GameObject child = Instantiate(mesh_prefab, new Vector3(0, i-10, 0), Quaternion.identity);
+            child.transform.parent = transform;
+            GameObject child2 = Instantiate(wall_mesh_prefab, new Vector3(0, i - 10, 0), Quaternion.identity);
+            child2.transform.parent = transform;
+        }
         GenerateMap();
     }
 
@@ -48,17 +61,34 @@ public class mapGenerator : MonoBehaviour {
         {
             WaterDrain(1);
         }
+        UpdateMeshes();
     }
-    void GenerateMap() {
+    void GenerateMap()
+    {
         map = new int[width, length];
         //RandomFillMap();
         BlastRandomHoles(start_pits);
         updateWater();
 
-        //RaiseLand();
-
-        MeshGenerator meshGen = GetComponent<MeshGenerator>();
+        //MeshGenAll meshGen = GetComponent<MeshGenAll>();
         //meshGen.GenerateMesh(map, 1);
+
+        //for (int i = 0; i < meshMap.Length; i++)
+        //{
+        //    meshMap[i].GenerateMesh(map, i ,1);
+        //}
+        //UpdateMeshes();
+    }
+    void UpdateMeshes()
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.GetComponent<MeshGenOne>() != null)
+            {
+                MeshGenOne meshGen = child.GetComponent<MeshGenOne>();
+                meshGen.GenerateMesh(map, 1);
+            }
+        }
     }
     void BlastRandomHoles(int count)
     {
@@ -255,11 +285,11 @@ public class mapGenerator : MonoBehaviour {
                     if (height < 0)
                     {
                         //Gizmos.color = Color.blue;
-                        Gizmos.color = new Color(col, 1 + (float)height / 15, 1f, 1f);
+                        Gizmos.color = new Color(col, 1 + (float)height / 15, 1f, .1f);
                     }
                     else
                         //Gizmos.color = new Color(col, 1f, 0f, 1f);
-                        Gizmos.color = new Color((float)height / 5, 1f, 0f);
+                        Gizmos.color = new Color((float)height / 5, 1f, 0f, .1f);
                     //Vector3 pos = new Vector3(-width / 2 + x + .5f, height, -length / 2 + y + .5f);
                     //Gizmos.DrawCube(pos, Vector3.one);
                     Vector3 pos = new Vector3(-width / 2 + x + .5f, height/2, -length / 2 + y + .5f);
