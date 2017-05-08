@@ -84,7 +84,9 @@
     <Compile Include="Assets\1\landMassGeneration.cs" />
     <Compile Include="Assets\1\meshGenerator.cs" />
     <Compile Include="Assets\MeshGenerator.cs" />
+    <Compile Include="Assets\camFollow.cs" />
     <Compile Include="Assets\mapGenerator.cs" />
+    <Compile Include="Assets\playerController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
