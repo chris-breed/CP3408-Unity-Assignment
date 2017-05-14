@@ -5,32 +5,32 @@ using UnityEngine;
 
 public class playerController : MonoBehaviour {
 
-    float fowardSpeed = 5f;
-    float torqueSpeed = 3f;
+    public float speed;
+    public float speedMultiplier;
     Rigidbody playerRB;
-    public Rigidbody cannonRB;
-
-    Vector3 cannonPivot;
+    public GameObject turrentEnd;
+    public GameObject turretPivotPoint;
 
     int floorMask;
     float camRayLength = 100f;
 
+    float gunLength;
+
     // Use this for initialization
     void Start() {
         playerRB = GetComponent<Rigidbody>();
-                
-        cannonPivot.Set(transform.position.x, gameObject.transform.GetChild(1).transform.position.y, transform.position.z); 
 
         floorMask = LayerMask.GetMask("SeaSurface");
 
+        gunLength = Vector3.Distance(turrentEnd.transform.position, turretPivotPoint.transform.position);
     }
 
     // Update is called once per frame
     void Update() {
-        float turn = Input.GetAxisRaw("Horizontal");
-        //w pressed move foward, a/d pressed rotate around y
 
-        Movement(turn);
+        //w pressed move foward, a/d pressed rotate around y
+        Movement();
+
         //rotateCannon();
     }
 
@@ -45,13 +45,15 @@ public class playerController : MonoBehaviour {
 
             Quaternion newRotation = Quaternion.LookRotation(cannonDirection);
 
-            cannonRB.MoveRotation(newRotation);
+
         }
     }
 
-    private void Movement(float turn) {
+    private void Movement() {
+        float turn = Input.GetAxisRaw("Horizontal");
+
         if (Input.GetKey(KeyCode.W)) {
-            playerRB.AddForce(Vector3.forward * fowardSpeed * Time.deltaTime);
+            playerRB.AddForce(transform.forward * (speed * speedMultiplier) * Time.deltaTime);
         }
 
         if (Input.GetKey(KeyCode.A)) { //-
