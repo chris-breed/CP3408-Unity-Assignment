@@ -7,65 +7,86 @@ public class playerController : MonoBehaviour {
 
     public float speed;
     public float speedMultiplier;
-    Rigidbody playerRB;
-    public GameObject turrentEnd;
-    public GameObject turretPivotPoint;
+    public float turnSpeed;
 
-    int floorMask;
-    float camRayLength = 100f;
+    public Rigidbody playerRB;
 
-    float gunLength;
+    public GameObject bulletPrefab;
+    public GameObject endOfBarrel;
 
-    // Use this for initialization
+    public int playerNumber;
+
     void Start() {
         playerRB = GetComponent<Rigidbody>();
 
-        floorMask = LayerMask.GetMask("SeaSurface");
 
-        gunLength = Vector3.Distance(turrentEnd.transform.position, turretPivotPoint.transform.position);
+        if (tag.Equals("Player")) {
+            playerNumber = 0;
+        } else if (tag.Equals("Player2")) {
+            playerNumber = 1;
+        }
     }
 
-    // Update is called once per frame
     void Update() {
+        //Player 1 controlls
+        //a rotates left, d rotates right, w moves forward
+        //space to shoot
+        movePlayer();
+        rotatePlayer();
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            shootProjectile();
+        }
 
-        //w pressed move foward, a/d pressed rotate around y
-        Movement();
-
-        //rotateCannon();
+        //Player 1 controlls
+        //left arrow rotates left, right arrow rotates right, up arrow moves forward
+        //numberpad 5 to shoot
+        movePlayer2();
+        rotatePlayer2();
+        if (Input.GetKeyDown(KeyCode.Keypad5)) {
+            shootProjectile2();
+        }
+        
     }
 
-    private void rotateCannon() {
-        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+    private void shootProjectile() {
+        GameObject projectile = Instantiate(bulletPrefab, endOfBarrel.transform.position, Quaternion.identity) as GameObject;
 
-        RaycastHit floorHit;
+        projectile.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
 
-        if (Physics.Raycast(camRay, out floorHit, camRayLength, floorMask)) {
-            Vector3 cannonDirection = floorHit.point - transform.position;
-            cannonDirection.y = 0f;
+        Destroy(projectile, 20f);
 
-            Quaternion newRotation = Quaternion.LookRotation(cannonDirection);
+    }
 
+    private void shootProjectile2() {
+        GameObject projectile = Instantiate(bulletPrefab, endOfBarrel.transform.position, Quaternion.identity) as GameObject;
 
+        projectile.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
+
+        Destroy(projectile, 20f);
+    }
+
+    private void rotatePlayer2() {
+        float forwardMove = Input.GetAxisRaw("Vertical2");
+        if (forwardMove > 0) {
+            playerRB.AddForce(transform.forward);
         }
     }
 
-    private void Movement() {
+    private void movePlayer2() {
+        float turn = Input.GetAxisRaw("Horizontal2");
+        transform.RotateAround(transform.position, transform.up, turn * Time.deltaTime * 90f * turnSpeed);
+    }
+
+    private void rotatePlayer() {
         float turn = Input.GetAxisRaw("Horizontal");
+        transform.RotateAround(transform.position, transform.up, turn * Time.deltaTime * 90f * turnSpeed);
 
-        if (Input.GetKey(KeyCode.W)) {
-            playerRB.AddForce(transform.forward * (speed * speedMultiplier) * Time.deltaTime);
-        }
-
-        if (Input.GetKey(KeyCode.A)) { //-
-            rotationalTurn(turn);
-        } else if (Input.GetKey(KeyCode.D)) { //+
-            rotationalTurn(turn);
-        }
-
-        rotationalTurn(turn);
     }
 
-    private void rotationalTurn(float turn) {
-        transform.RotateAround(transform.position, transform.up, turn * Time.deltaTime * 90f);
+    private void movePlayer() {
+        float forwardMove = Input.GetAxisRaw("Vertical");
+        if (forwardMove > 0) {
+            playerRB.AddForce(transform.forward);
+        }
     }
 }
