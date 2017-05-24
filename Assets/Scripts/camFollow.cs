@@ -26,7 +26,7 @@ public class camFollow : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        
+
     }
 
     // Update is called once per frame
@@ -52,9 +52,9 @@ public class camFollow : MonoBehaviour {
             newCameraHeight = 30f;
         }
 
-        if(distance >= 10 ) {
-             newCameraHeight = distance * viewSize;
-            if(newCameraHeight >= maxCameraHeight) {
+        if (distance >= 10) {
+            newCameraHeight = distance * viewSize;
+            if (newCameraHeight >= maxCameraHeight) {
                 newCameraHeight = maxCameraHeight;
             }
         }
@@ -62,7 +62,7 @@ public class camFollow : MonoBehaviour {
         cameraHeight.y = newCameraHeight;
 
         Camera.main.transform.position = cameraHeight;
-        
+
 
     }
 }
