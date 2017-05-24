@@ -167,7 +167,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 80
+  field of view: 30
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -192,7 +192,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 35466368}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 25, z: 5}
+  m_LocalPosition: {x: 0, y: 30, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -209,12 +209,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2926014312c80a14d87e6128f28fc6f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  viewSize: 5
   player1: {fileID: 60467073}
   player2: {fileID: 1595919764}
-  minZoom: 30
-  maxZoom: 80
   distance: 0
-  newFieldOfView: 0
+  newCameraHeight: 0
+  maxCameraHeight: 100
 --- !u!1 &60467068
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,8 +226,9 @@ GameObject:
   - component: {fileID: 60467072}
   - component: {fileID: 60467070}
   - component: {fileID: 60467069}
-  - component: {fileID: 60467074}
   - component: {fileID: 60467075}
+  - component: {fileID: 60467074}
+  - component: {fileID: 60467071}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -282,6 +283,22 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &60467071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 60467068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e882efcb08c8e14fbff4159c7bb1dae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePoint: {fileID: 73825143}
+  prefab: {fileID: 1688635104922570, guid: 0ef8ca7687b307e4dbd289501e4fb678, type: 2}
+  weapon: 1
+  timer: 0
+  weaponShootSpeed: 1
 --- !u!33 &60467072
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -315,13 +332,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34df5d2b9f5dfcb43bbf62347d192b6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  speedMultiplier: 250
-  turnSpeed: 5
   playerRB: {fileID: 60467069}
-  bulletPrefab: {fileID: 1688635104922570, guid: 0ef8ca7687b307e4dbd289501e4fb678,
-    type: 2}
-  endOfBarrel: {fileID: 73825143}
+  bSpeed: 1
+  baseSpeedMultiplier: 5
+  baseTurnSpeed: 5
 --- !u!136 &60467075
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -575,10 +589,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1595919764}
   - component: {fileID: 1595919763}
-  - component: {fileID: 1595919762}
   - component: {fileID: 1595919761}
   - component: {fileID: 1595919760}
+  - component: {fileID: 1595919762}
   - component: {fileID: 1595919759}
+  - component: {fileID: 1595919765}
   m_Layer: 0
   m_Name: Player2
   m_TagString: Player2
@@ -597,13 +612,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fb45ee405616d64a83df20bdb648a21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  speedMultiplier: 250
-  turnSpeed: 5
   playerRB: {fileID: 1595919760}
-  bulletPrefab: {fileID: 1688635104922570, guid: 0ef8ca7687b307e4dbd289501e4fb678,
-    type: 2}
-  endOfBarrel: {fileID: 1014030756}
+  bSpeed: 1
+  baseSpeedMultiplier: 5
+  baseTurnSpeed: 5
 --- !u!54 &1595919760
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -611,8 +623,8 @@ Rigidbody:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1595919758}
   serializedVersion: 2
-  m_Mass: 0.1
-  m_Drag: 0.05
+  m_Mass: 1
+  m_Drag: 0
   m_AngularDrag: Infinity
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -686,6 +698,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 11.227, z: 0}
+--- !u!114 &1595919765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1595919758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9128534093b9512429bab8f17c54a217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePoint: {fileID: 1014030756}
+  prefab: {fileID: 1688635104922570, guid: 0ef8ca7687b307e4dbd289501e4fb678, type: 2}
+  weapon: 1
+  weaponShootSpeed: 5
 --- !u!1 &1973839684
 GameObject:
   m_ObjectHideFlags: 0

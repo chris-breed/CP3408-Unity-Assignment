@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class camFollow : MonoBehaviour {
 
+    public float viewSize;
+
     public Transform player1;
     public Transform player2;
 
@@ -18,16 +20,13 @@ public class camFollow : MonoBehaviour {
 
     Vector3 centreOfTwoPlayers;
 
-    public float minZoom = 1;
-    public float maxZoom = 10;
-
     public float distance;
-    public float newFieldOfView;
+    public float newCameraHeight;
+    public float maxCameraHeight;
 
     // Use this for initialization
     void Start() {
-        newFieldOfView = 30f;
-
+        
     }
 
     // Update is called once per frame
@@ -43,24 +42,27 @@ public class camFollow : MonoBehaviour {
         transform.position = newCameraPosition + cameraHeight;
         transform.LookAt(pivotPoint);
 
-        adjustFieldOfView(distance);
+        adjustCameraHeight(distance);
 
     }
 
-    private void adjustFieldOfView(float distance) {
+    private void adjustCameraHeight(float distance) {
 
-        if (distance < 10) {
-            newFieldOfView = 30f;
-        } else {
-
+        if (distance <= 10) {
+            newCameraHeight = 30f;
         }
 
-
-        if (distance > 40) {
-            newFieldOfView = 80f;
+        if(distance >= 10 ) {
+             newCameraHeight = distance * viewSize;
+            if(newCameraHeight >= maxCameraHeight) {
+                newCameraHeight = maxCameraHeight;
+            }
         }
 
-        Camera.main.fieldOfView = newFieldOfView;
+        cameraHeight.y = newCameraHeight;
+
+        Camera.main.transform.position = cameraHeight;
+        
 
     }
 }
