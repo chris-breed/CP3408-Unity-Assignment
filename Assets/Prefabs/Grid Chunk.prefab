@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 64027775394489330}
   m_Layer: 0
   m_Name: GridMesh
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -8,7 +8,6 @@ public class mapGenerator : MonoBehaviour {
 
     private int width;
     private int length;
-    public const int chunkCountX = 3, chunkCountZ = 3;
 
     public int start_pits = 20;
     //GridMesh mesh;
@@ -42,8 +41,8 @@ public class mapGenerator : MonoBehaviour {
         //    GameObject child2 = Instantiate(wall_mesh_prefab, new Vector3(0, i - 10, 0), Quaternion.identity);
         //    child2.transform.parent = transform;
         //}
-        width = Metrics.chunkSizeX * chunkCountX;
-        length = Metrics.chunkSizeZ * chunkCountZ;
+        width = Metrics.xBlocks();
+        length = Metrics.zBlocks();
         //mesh = GetComponentInChildren<GridMesh>();
         CreateChunks();
         GenerateMap();
@@ -51,32 +50,36 @@ public class mapGenerator : MonoBehaviour {
 
     void CreateChunks()
     {
-        chunks = new GridChunk[chunkCountX * chunkCountZ];
+        chunks = new GridChunk[Metrics.chunkCount()];
 
-        for (int z = 0, i = 0;  z < chunkCountZ; z++)
+        for (int z = 0, i = 0;  z < Metrics.chunkCountZ; z++)
         {
-            for (int x = 0; x < chunkCountX; x++)
+            for (int x = 0; x < Metrics.chunkCountX; x++)
             {
                 //GridChunk chunk = chunks[i++] = Instantiate(chunkPrefab, new Vector3(Metrics.chunkSizeX*Metrics.scale,0,Metrics.chunkSizeZ*z*Metrics.scale), Quaternion.identity);
-                chunks[i] = Instantiate(chunkPrefab, new Vector3(Metrics.chunkSizeX * Metrics.scale * x, 0, Metrics.chunkSizeZ * z * Metrics.scale), Quaternion.identity);
-                //GridChunk chunk = chunks[i++] = Instantiate(chunkPrefab);
-                chunks[i].transform.SetParent(transform);
+                //chunks[i] = Instantiate(chunkPrefab, new Vector3(Metrics.chunkSizeX * Metrics.scale * x, 0, Metrics.chunkSizeZ * z * Metrics.scale), Quaternion.identity);
+                GridChunk chunk = chunks[i++] = Instantiate(chunkPrefab);
+                chunk.transform.SetParent(transform);
                 //chunks[i].setHeights(x,z, map);
-                i++;
+                //i++;
             }
         }
     }
 
     void UpdateChunks()
     {
-        for (int z = 0, i = 0; z < chunkCountZ; z++)
+        for (int z = 0, i = 0; z < Metrics.chunkCountZ; z++)
         {
-            for (int x = 0; x < chunkCountX; x++)
+            for (int x = 0; x < Metrics.chunkCountX; x++)
             {
-                chunks[i].setHeights(x, z, map);
+                if (chunks[i].needsUpdate)
+                {
+                    chunks[i].setHeights(x, z, map);
+                }
                 i++;
             }
         }
+
     }
 
     void Update() {
@@ -99,8 +102,14 @@ public class mapGenerator : MonoBehaviour {
         while (WaterSurfaceCount() > water_surface_percent * width * length)
         {
             WaterDrain(1);
+            for (int i = 0; i < Metrics.chunkCount(); i++)
+            {
+                    chunks[i].needsUpdate = true;
+            }
+
         }
         //UpdateMeshes();
+
         UpdateChunks();
         //mesh.Triangulate(map);
     }
@@ -234,13 +243,22 @@ public class mapGenerator : MonoBehaviour {
                     if (map[i, j] > z + destruction)
                     {
                         map[i, j] -= destruction * 2;
+                        primeChunk(i, j);
                     }
                     else if (map[i, j] > z - destruction)
-                    { map[i, j] = z - destruction; }
+                    { map[i, j] = z - destruction;
+                        primeChunk(i, j);
+                    }
                 }
 
             }
         }
+    }
+
+    void primeChunk(int i, int j)
+    {
+        int chunkIndex = j / Metrics.chunkSizeX*Metrics.chunkCountZ + i / Metrics.chunkSizeZ;
+        chunks[chunkIndex].needsUpdate = true;
     }
 
     int WaterCount()    //count volume of water
@@ -344,6 +362,10 @@ public class mapGenerator : MonoBehaviour {
         return wallCount;
     }
 
+    public int getHeight(int x, int z)
+    {
+        return map[x, z];
+    }
 
     void OnDrawGizmos() {
         if (map != null) {

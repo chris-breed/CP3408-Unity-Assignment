@@ -7,7 +7,6 @@ public class GridMesh : MonoBehaviour {
     //public int xSize, ySize;
     [Range(0.0f, 1.0f)]
     public float platformSize = 1f;
-    public const float verticalScale = 1f;
     //private int[,] map;
     List<Vector3> vertices;
     List<int> triangles;
@@ -50,9 +49,29 @@ public class GridMesh : MonoBehaviour {
         mesh.RecalculateNormals();
         transform.GetComponent<MeshCollider>().sharedMesh = mesh;
     }
+    public void Triangulate(int[,] cells, int chunkX, int chunkZ)
+    {
+        mesh.Clear();
+        vertices.Clear();
+        colors.Clear();
+        triangles.Clear();
+        for (int i = 0; i < Metrics.chunkSizeX; i++)
+        {
+            for (int j = 0; j < Metrics.chunkSizeZ; j++)
+            {
+                //Triangulate(i, j, heightMap[i,j]);
+                Triangulate(chunkX*Metrics.chunkSizeX+i,chunkZ*Metrics.chunkSizeZ+j, cells);
+            }
+        }
+        mesh.vertices = vertices.ToArray();
+        mesh.triangles = triangles.ToArray();
+        mesh.colors = colors.ToArray();
+        mesh.RecalculateNormals();
+        transform.GetComponent<MeshCollider>().sharedMesh = mesh;
+    }
     Vector3 GetCenter(int x, int z, int[,] map)
     {
-        Vector3 center = new Vector3(x, map[x, z]*verticalScale, z) * Metrics.scale;
+        Vector3 center = new Vector3(x, map[x, z]*Metrics.verticalScale, z) * Metrics.scale;
         return center;
     }
     Color makeColor(float height)
