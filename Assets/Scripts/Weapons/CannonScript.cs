@@ -7,7 +7,6 @@ public class CannonScript : MonoBehaviour {
     public int defaultWeaponDamage = 2;
     //public int playerDamage;
     //public int shotDamage;
-
     public int playerFired;
 
 	// Use this for initialization
@@ -19,6 +18,14 @@ public class CannonScript : MonoBehaviour {
         playerFired = player;
         //playerDamage = pDamage;
 
+    }
+
+    void Explode()
+    {
+        int gridX = (int)Mathf.Round(transform.position.x / Metrics.scale);
+        int gridY = (int)Mathf.Round(transform.position.x / Metrics.scale);
+        mapGenerator mapMother = GameObject.FindObjectOfType<mapGenerator>();
+        mapMother.BlowUp(gridX,gridY);
     }
 
 }

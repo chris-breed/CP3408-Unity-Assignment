@@ -56,8 +56,8 @@ public class player1Script : Controller {
 
     public void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "Projectile") {
-            int damageTaken = other.gameObject.GetComponent<CannonScript>().shotDamage;
-            takeDamage(damageTaken);
+            //int damageTaken = other.gameObject.GetComponent<CannonScript>().shotDamage;
+            //takeDamage(damageTaken);
         }
     }
 }

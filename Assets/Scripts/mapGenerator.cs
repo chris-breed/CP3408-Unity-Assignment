@@ -185,6 +185,11 @@ public class mapGenerator : MonoBehaviour {
             }
         }
     }
+    public void BlowUp(int x, int y)
+    {
+        BlastClean(x, y, 10, 1);
+        updateWater();
+    }
     void BlastClean(int x, int y, float radius, float depth)//leaves a hole with a sphere shape
                                                              //simulation of a clean hole and then falling sand
     {
