@@ -40,7 +40,7 @@ public class camFollow : MonoBehaviour {
 
 
         transform.position = newCameraPosition + cameraHeight;
-        transform.LookAt(pivotPoint);
+        //transform.LookAt(pivotPoint);
 
         adjustCameraHeight(distance);
 

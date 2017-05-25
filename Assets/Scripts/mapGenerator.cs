@@ -9,7 +9,6 @@ public class mapGenerator : MonoBehaviour {
     private int width;
     private int length;
     public const int chunkCountX = 3, chunkCountZ = 3;
-    public const int dweebo = 12;
 
     public int start_pits = 20;
     //GridMesh mesh;
@@ -187,11 +186,12 @@ public class mapGenerator : MonoBehaviour {
     }
     public void BlowUp(int x, int y)
     {
-        BlastClean(x, y, 10, 1);
+        int h = 0;
+        BlastInAir(x, y, h, 10, 1);
         updateWater();
     }
     void BlastClean(int x, int y, float radius, float depth)//leaves a hole with a sphere shape
-                                                             //simulation of a clean hole and then falling sand
+                                                             //simulation of a clean hole and then falling sand blasting on the ground
     {
         int rad = (int)radius;
         int z;
@@ -211,6 +211,29 @@ public class mapGenerator : MonoBehaviour {
                     if (map[i, j] > z+destruction)
                     {
                         map[i, j] -= destruction*2;
+                    }
+                    else if (map[i, j] > z - destruction)
+                    { map[i, j] = z - destruction; }
+                }
+
+            }
+        }
+    }
+    void BlastInAir(int x, int y, int z, float radius, float depth)//leaves a hole with a sphere shape
+                                                            //simulation of a clean hole and then falling sand
+    {
+        int rad = (int)radius;
+        for (int i = Mathf.Max(x - rad, 0); i < Mathf.Min(x + rad, width); i++)//iterates through with i starting at 0 or greater
+        {
+            for (int j = Mathf.Max(y - rad, 0); j < Mathf.Min(y + rad, length); j++)
+            {   //distance from epicenter
+                float distance = Mathf.Sqrt(Mathf.Pow(Mathf.Abs(i - x), 2f) + Mathf.Pow(Mathf.Abs(j - y), 2f));
+                if (distance <= radius)
+                {
+                    int destruction = (int)(Math.Sqrt((radius * radius - distance * distance)) * depth);//sphere rather than cone
+                    if (map[i, j] > z + destruction)
+                    {
+                        map[i, j] -= destruction * 2;
                     }
                     else if (map[i, j] > z - destruction)
                     { map[i, j] = z - destruction; }
