@@ -25,6 +25,7 @@ public class CannonScript : MonoBehaviour {
         int gridY = (int)Mathf.Round(transform.position.z / Metrics.scale);
         mapGenerator mapMother = FindObjectOfType<mapGenerator>();
         mapMother.BlowUp(gridX, gridY);
+        Destroy(gameObject);
     }
 
 
