@@ -9,12 +9,9 @@ public class CannonScript : MonoBehaviour {
     //public int shotDamage;
     public int playerFired;
 
-	// Use this for initialization
 	void Start () {
-        //Explode();
-        //shotDamage = (defaultDamage * playerDamage);
-        //Invoke("Explode", );
-	}
+
+    }
 
     public void setPlayerAndDamage(int player, int pDamage) {
         playerFired = player;
@@ -22,16 +19,20 @@ public class CannonScript : MonoBehaviour {
 
     }
 
-    void Explode()
-    {
+    void Explode() {
         int gridX = (int)Mathf.Round(transform.position.x / Metrics.scale);
         int gridY = (int)Mathf.Round(transform.position.z / Metrics.scale);
+
         mapGenerator mapMother = GameObject.FindObjectOfType<mapGenerator>();
         mapMother.BlowUp(gridX,gridY);
         Destroy(gameObject);
     }
 
 
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag == "Terrain") {
+            Explode();
 
-
+        }
+    }
 }
