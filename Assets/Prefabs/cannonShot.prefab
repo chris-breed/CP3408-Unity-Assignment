@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 54883639561639242}
   - component: {fileID: 114219117004442926}
   m_Layer: 0
-  m_Name: bulletTestPrefab
+  m_Name: cannonShot
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,9 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b8dcb9454fa8cc429e0f39a1e116a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultDamage: 2
-  playersDamage: 0
-  shotDamage: 0
+  damage: 2
   playerFired: 0
 --- !u!135 &135652752241973422
 SphereCollider:
@@ -261,7 +259,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 0
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -303,7 +301,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 0.9338235, g: 0.013732712, b: 0.013732712, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -609,7 +607,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 1000
+    maxNumParticles: 1
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -656,14 +654,14 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 4
     enabled: 1
-    type: 4
-    angle: 25
+    type: 6
+    angle: 0
     length: 5
     boxX: 1
-    boxY: 1
-    boxZ: 1
+    boxY: 1.680872
+    boxZ: 1.0224731
     radius:
-      value: 1
+      value: 0.2
       mode: 0
       spread: 0
       speed:
@@ -770,7 +768,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2

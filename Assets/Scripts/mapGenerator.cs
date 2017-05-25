@@ -81,11 +81,11 @@ public class mapGenerator : MonoBehaviour {
     }
 
     void Update() {
-        if (Input.GetMouseButton(0)) {
-            //GenerateMap();
-            BlastRandomHoles(1);
-            updateWater();
-        }
+        //if (Input.GetMouseButton(0)) {
+        //    //GenerateMap();
+        //    BlastRandomHoles(1);
+        //    updateWater();
+        //}
         //bomber_x += (int)Input.GetAxis("Horizontal");
         //bomber_y += (int)Input.GetAxis("Vertical");
         //if (Input.GetKeyDown("space"))
