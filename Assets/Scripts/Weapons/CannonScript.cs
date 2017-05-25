@@ -13,6 +13,7 @@ public class CannonScript : MonoBehaviour {
 	void Start () {
         //Explode();
         //shotDamage = (defaultDamage * playerDamage);
+        //Invoke("Explode", );
 	}
 
     public void setPlayerAndDamage(int player, int pDamage) {
