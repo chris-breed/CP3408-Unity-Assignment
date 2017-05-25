@@ -23,7 +23,7 @@ public class Controller : MonoBehaviour {
         } else if (forward < 0) {
             RB.velocity = RB.velocity * 0.9f;
         } else {
-            RB.velocity = RB.velocity * 0.7f;
+            RB.velocity = RB.velocity * 0.1f;
         }
 
         //rotation
@@ -39,9 +39,11 @@ public class Controller : MonoBehaviour {
 
                 bulletScript.damage = damage;
                 bulletScript.playerFired = player;
+
                 break;
         }
     }
+
 
     public void takeDamage(int otherPlayersShotDamage) {
 

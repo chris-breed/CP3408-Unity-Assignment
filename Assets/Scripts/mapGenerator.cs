@@ -86,13 +86,13 @@ public class mapGenerator : MonoBehaviour {
             BlastRandomHoles(1);
             updateWater();
         }
-        bomber_x += (int)Input.GetAxis("Horizontal");
-        bomber_y += (int)Input.GetAxis("Vertical");
-        if (Input.GetKeyDown("space"))
-        {
-            BlastClean(bomber_x, bomber_y, 10, 1);
-            updateWater();
-        }
+        //bomber_x += (int)Input.GetAxis("Horizontal");
+        //bomber_y += (int)Input.GetAxis("Vertical");
+        //if (Input.GetKeyDown("space"))
+        //{
+        //    BlastClean(bomber_x, bomber_y, 10, 1);
+        //    updateWater();
+        //}
     }
     void updateWater()
     {
@@ -187,7 +187,7 @@ public class mapGenerator : MonoBehaviour {
     }
     public void BlowUp(int x, int y)
     {
-        BlastClean(x, y, 10, 1);
+        BlastClean(x, y, 5, 1);
         updateWater();
     }
     void BlastClean(int x, int y, float radius, float depth)//leaves a hole with a sphere shape

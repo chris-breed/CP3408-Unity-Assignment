@@ -10,7 +10,7 @@ public class camFollow : MonoBehaviour {
     public Transform player1;
     public Transform player2;
 
-    Vector3 cameraHeight = new Vector3(0, 30f, 0);
+    float cameraHeight = 30f;
     Vector3 pivotPoint; //should be center of both players
 
     Vector3 player1Pos;
@@ -26,21 +26,18 @@ public class camFollow : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-
     }
 
     // Update is called once per frame
-    void Update() {
+    void LateUpdate() {
         player1Pos = player1.position;
         player2Pos = player2.position;
         pivotPoint = Vector3.Lerp(player1Pos, player2Pos, 0.5f);
         distance = Vector3.Distance(player1Pos, player2Pos);
 
         Vector3 newCameraPosition = pivotPoint;
-
-
-        transform.position = newCameraPosition + cameraHeight;
-        transform.LookAt(pivotPoint);
+        newCameraPosition.y = cameraHeight;
+        transform.position = newCameraPosition;
 
         adjustCameraHeight(distance);
 
@@ -59,9 +56,9 @@ public class camFollow : MonoBehaviour {
             }
         }
 
-        cameraHeight.y = newCameraHeight;
+        
 
-        Camera.main.transform.position = cameraHeight;
+        Camera.main.transform.position = new Vector3(transform.position.x, newCameraHeight, transform.position.z);
 
 
     }

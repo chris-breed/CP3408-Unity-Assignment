@@ -12,6 +12,8 @@ public class CannonScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         //shotDamage = (defaultDamage * playerDamage);
+
+        Invoke("Explode", 2);
 	}
 
     public void setPlayerAndDamage(int player, int pDamage) {
@@ -24,8 +26,11 @@ public class CannonScript : MonoBehaviour {
     {
         int gridX = (int)Mathf.Round(transform.position.x / Metrics.scale);
         int gridY = (int)Mathf.Round(transform.position.x / Metrics.scale);
-        mapGenerator mapMother = GameObject.FindObjectOfType<mapGenerator>();
+        mapGenerator mapMother = FindObjectOfType<mapGenerator>();
         mapMother.BlowUp(gridX,gridY);
     }
+
+
+
 
 }
