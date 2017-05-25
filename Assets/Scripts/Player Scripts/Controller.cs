@@ -7,7 +7,8 @@ public class Controller : MonoBehaviour {
 
     //prefabs for weapons
     public Transform firePoint;
-
+    public int bullet_speed = 3000;
+    public float bullet_time = .5f;
     public GameObject cannonShot;
 
     public CannonScript cannonScript;
@@ -34,9 +35,9 @@ public class Controller : MonoBehaviour {
         switch (weaponType) {
             case 1:
                 GameObject projectile = Instantiate(cannonShot, firePoint.transform.position, Quaternion.identity) as GameObject;
-                projectile.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
+                projectile.GetComponent<Rigidbody>().AddForce(transform.forward * bullet_speed);
                 CannonScript bulletScript = projectile.GetComponent<CannonScript>();
-
+                bulletScript.Invoke("Explode", bullet_time);
                 bulletScript.damage = damage;
                 bulletScript.playerFired = player;
 

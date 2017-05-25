@@ -48,6 +48,7 @@ public class GridMesh : MonoBehaviour {
         mesh.triangles = triangles.ToArray();
         mesh.colors = colors.ToArray();
         mesh.RecalculateNormals();
+        transform.GetComponent<MeshCollider>().sharedMesh = mesh;
     }
     Vector3 GetCenter(int x, int z, int[,] map)
     {
