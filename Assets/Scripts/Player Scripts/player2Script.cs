@@ -9,50 +9,31 @@ public class player2Script : Controller {
     public Rigidbody playerRB;
     float timer;
 
+    int player; //2
+
     //movement variables
-    float forwardSpeed;
-    float speedModifier;
-    float turnSpeed;
+    public float forwardSpeed;
+    public float speedModifier;
+    public float turnSpeed;
 
     //health variables
-    int health;
+    public int health;
 
     //weapon variable
-    int weaponType; //1 = cannon
-    int weaponShootSpeed;
-    int weaponDamage;
-
+    public int weaponType; //1 = cannon
+    public int weaponShootSpeed;
+    public int playerDefaultDamage;
 
     float player1Forward;
     float player1Rotate;
 
-
-    void Awake() {
-        initMovementVariables();
-        initWeaponVariables();
-        initPlayerStatsVariables();
-    }
-
-    private void initWeaponVariables() {
-        weaponType = 1;
-        weaponShootSpeed = 2;
-        weaponDamage = 5;
-    }
-
-    private void initMovementVariables() {
-        forwardSpeed = 1;
-        speedModifier = 5;
-        turnSpeed = 5;
-    }
-
-    private void initPlayerStatsVariables() {
-        health = 100;
+    private void Awake() {
+        player = 2;
     }
 
     // Update is called once per frame
     void Update() {
         timer += Time.deltaTime;
-
 
         if (health <= 0) {
             death();
@@ -66,13 +47,8 @@ public class player2Script : Controller {
         if (Input.GetKey(KeyCode.Keypad5)) {
             if (timer >= weaponShootSpeed) {
                 timer = 0;
-                shootWeapon(weaponType, weaponDamage);
+                shootWeapon(player, weaponType, playerDefaultDamage);
             }
         }
-    }
-
-    private new void death() {
-        //kill player
-        throw new NotImplementedException();
     }
 }
