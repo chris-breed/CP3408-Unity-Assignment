@@ -25,7 +25,6 @@ public class Controller : MonoBehaviour {
             case 1:
                 GameObject projectile = Instantiate(cannonShot, firePoint.transform.position, Quaternion.identity) as GameObject;
                 projectile.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
-                Destroy(projectile, 5f);
                 break;
         }
     }
