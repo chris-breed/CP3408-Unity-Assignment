@@ -22,7 +22,7 @@ public class player1Script : Controller {
     //weapon variable
     public int weaponType; //1 = cannon
     public int weaponShootSpeed;
-    public int playerDefaultDamage;
+    public int weaponDamage =1 ;
 
     float player1Forward;
     float player1Rotate;
@@ -49,15 +49,15 @@ public class player1Script : Controller {
         if (Input.GetKey(KeyCode.Space)) {
             if (timer >= weaponShootSpeed) {
                 timer = 0;
-                shootWeapon(player, weaponType, playerDefaultDamage);
+                shootWeapon(player, weaponType, weaponDamage);
             }
         }
     }
 
     public void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "Projectile") {
-            //int damageTaken = other.gameObject.GetComponent<CannonScript>().shotDamage;
-            //takeDamage(damageTaken);
+            int damageTaken = other.gameObject.GetComponent<CannonScript>().damage;
+            takeDamage(damageTaken);
         }
     }
 }

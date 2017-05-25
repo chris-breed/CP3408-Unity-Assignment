@@ -302,8 +302,8 @@ MonoBehaviour:
   turnSpeed: 5
   health: 100
   weaponType: 1
-  weaponShootSpeed: 2
-  playerDefaultDamage: 0
+  weaponShootSpeed: 1
+  weaponDamage: 0
 --- !u!33 &60467072
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -842,7 +842,7 @@ MonoBehaviour:
   health: 100
   weaponType: 1
   weaponShootSpeed: 2
-  playerDefaultDamage: 0
+  weaponDamage: 0
 --- !u!54 &1595919760
 Rigidbody:
   m_ObjectHideFlags: 0
