@@ -13,7 +13,8 @@ public class CannonScript : MonoBehaviour {
 	void Start () {
         Explode();
         //shotDamage = (defaultDamage * playerDamage);
-    }
+        Invoke("Explode", 2);
+	}
 
     public void setPlayerAndDamage(int player, int pDamage) {
         playerFired = player;
@@ -28,5 +29,8 @@ public class CannonScript : MonoBehaviour {
         mapGenerator mapMother = GameObject.FindObjectOfType<mapGenerator>();
         mapMother.BlowUp(gridX,gridY);
     }
+
+
+
 
 }
