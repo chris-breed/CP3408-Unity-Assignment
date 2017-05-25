@@ -9,7 +9,7 @@ public class player2Script : Controller {
     public Rigidbody playerRB;
     float timer;
 
-    int player; //2
+    int player; //1
 
     //movement variables
     public float forwardSpeed;
@@ -22,10 +22,10 @@ public class player2Script : Controller {
     //weapon variable
     public int weaponType; //1 = cannon
     public int weaponShootSpeed;
-    public int playerDefaultDamage;
+    public int weaponDamage = 1;
 
-    float player1Forward;
-    float player1Rotate;
+    float player2Forward;
+    float player2Rotate;
 
     private void Awake() {
         player = 2;
@@ -38,17 +38,26 @@ public class player2Script : Controller {
         if (health <= 0) {
             death();
         }
+    }
 
-        player1Forward = Input.GetAxisRaw("P2_Vertical");
-        player1Rotate = Input.GetAxis("P2_Horizontal");
+    void FixedUpdate() {
+        player2Forward = Input.GetAxisRaw("P2_Vertical");
+        player2Rotate = Input.GetAxis("P2_Horizontal");
 
-        updateForwardAndRotation(player1Forward, player1Rotate, playerRB, forwardSpeed, speedModifier, turnSpeed);
+        updateForwardAndRotation(player2Forward, player2Rotate, playerRB, forwardSpeed, speedModifier, turnSpeed);
 
         if (Input.GetKey(KeyCode.Keypad5)) {
             if (timer >= weaponShootSpeed) {
                 timer = 0;
-                shootWeapon(player, weaponType, playerDefaultDamage);
+                shootWeapon(player, weaponType, weaponDamage);
             }
+        }
+    }
+
+    public void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag == "Projectile") {
+            int damageTaken = other.gameObject.GetComponent<CannonScript>().damage;
+            takeDamage(damageTaken);
         }
     }
 }

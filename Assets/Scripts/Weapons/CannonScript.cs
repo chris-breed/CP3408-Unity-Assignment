@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CannonScript : MonoBehaviour {
 
-    public int defaultWeaponDamage = 2;
+    public int damage = 2;
     //public int playerDamage;
     //public int shotDamage;
 

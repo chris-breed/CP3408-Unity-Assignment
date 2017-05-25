@@ -37,7 +37,7 @@ public class Controller : MonoBehaviour {
                 projectile.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
                 CannonScript bulletScript = projectile.GetComponent<CannonScript>();
 
-                bulletScript.defaultWeaponDamage = damage;
+                bulletScript.damage = damage;
                 bulletScript.playerFired = player;
                 break;
         }
