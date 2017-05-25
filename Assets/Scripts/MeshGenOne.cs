@@ -19,6 +19,7 @@ public class MeshGenOne : MonoBehaviour
     public void GenerateMesh(int[,] map, float squareSize)
     {
         //transform.position = Vector3.up*height*squareSize;
+
         int cutoff = (int) transform.position.y;
         triangleDictionary.Clear();
         outlines.Clear();
@@ -37,15 +38,18 @@ public class MeshGenOne : MonoBehaviour
             }
         }
 
-        Mesh mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
-
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.RecalculateNormals();
-
         if (make_walls)
         { CreateWallMesh(); }
+        else
+        {
+            Mesh mesh = new Mesh();
+            GetComponent<MeshFilter>().mesh = mesh;
+
+            mesh.vertices = vertices.ToArray();
+            mesh.triangles = triangles.ToArray();
+            mesh.RecalculateNormals();
+        }
+
     }
 
     void CreateWallMesh()

@@ -4,25 +4,20 @@ using System;
 using Boo.Lang;
 using System.Collections.Generic;
 
-public class mapGenerator : MonoBehaviour {
-
-    private int width;
-    private int length;
-    public const int chunkCountX = 3, chunkCountZ = 3;
-    public const int dweebo = 12;
-
+public class terrainGenerator : MonoBehaviour
+{
+    TerrainData TD;
+    public int width;
+    public int length;
     public int start_pits = 20;
-    //GridMesh mesh;
+
     public int average_depth = 3;
 
     [Range(0, 1)]
     public float water_surface_percent = 0.71f;
-
-    public GridChunk chunkPrefab;
-    //public Transform chunkPrefab;
-
-    int[,] map;
-    GridChunk[] chunks;
+    public GameObject mesh_prefab;
+    public GameObject wall_mesh_prefab;
+    float[,] map;
 
     int bomber_x = 0;
     int bomber_y = 0;
@@ -31,57 +26,19 @@ public class mapGenerator : MonoBehaviour {
 
     //MeshGenAll[] meshMap;
 
-    void Start() {
-        //meshMap = new MeshGenAll[20];
-        //for (int i = 0; i < meshMap.Length; i++)
-        //for (int i = 0; i < 20; i++)
-        //    {
-        //    //MeshGenAll meshGen = gameObject.AddComponent<MeshGenAll>();
-        //    //meshGen.GenerateMesh(map, 1);
-        //    GameObject child = Instantiate(mesh_prefab, new Vector3(0, i-10, 0), Quaternion.identity);
-        //    child.transform.parent = transform;
-        //    GameObject child2 = Instantiate(wall_mesh_prefab, new Vector3(0, i - 10, 0), Quaternion.identity);
-        //    child2.transform.parent = transform;
-        //}
-        width = Metrics.chunkSizeX * chunkCountX;
-        length = Metrics.chunkSizeZ * chunkCountZ;
-        //mesh = GetComponentInChildren<GridMesh>();
-        CreateChunks();
+    void Start()
+    {
+        TD = gameObject.GetComponent<Terrain>().terrainData;
+        width = TD.heightmapHeight;
+        length = TD.heightmapHeight;
+        print("size is: "+TD.heightmapHeight + " and " + TD.heightmapHeight);
         GenerateMap();
     }
 
-    void CreateChunks()
+    void Update()
     {
-        chunks = new GridChunk[chunkCountX * chunkCountZ];
-
-        for (int z = 0, i = 0;  z < chunkCountZ; z++)
+        if (Input.GetMouseButton(0))
         {
-            for (int x = 0; x < chunkCountX; x++)
-            {
-                //GridChunk chunk = chunks[i++] = Instantiate(chunkPrefab, new Vector3(Metrics.chunkSizeX*Metrics.scale,0,Metrics.chunkSizeZ*z*Metrics.scale), Quaternion.identity);
-                chunks[i] = Instantiate(chunkPrefab, new Vector3(Metrics.chunkSizeX * Metrics.scale * x, 0, Metrics.chunkSizeZ * z * Metrics.scale), Quaternion.identity);
-                //GridChunk chunk = chunks[i++] = Instantiate(chunkPrefab);
-                chunks[i].transform.SetParent(transform);
-                //chunks[i].setHeights(x,z, map);
-                i++;
-            }
-        }
-    }
-
-    void UpdateChunks()
-    {
-        for (int z = 0, i = 0; z < chunkCountZ; z++)
-        {
-            for (int x = 0; x < chunkCountX; x++)
-            {
-                chunks[i].setHeights(x, z, map);
-                i++;
-            }
-        }
-    }
-
-    void Update() {
-        if (Input.GetMouseButton(0)) {
             //GenerateMap();
             BlastRandomHoles(1);
             updateWater();
@@ -101,43 +58,35 @@ public class mapGenerator : MonoBehaviour {
         {
             WaterDrain(1);
         }
-        //UpdateMeshes();
-        UpdateChunks();
-        //mesh.Triangulate(map);
+        UpdateTerrain();
     }
     void GenerateMap()
     {
-        map = new int[width, length];
+        map = new float[width, length];
         //RandomFillMap();
         BlastRandomHoles(start_pits);
         updateWater();
-        //mesh.Triangulate(map);
-        //MeshGenAll meshGen = GetComponent<MeshGenAll>();
-        //meshGen.GenerateMesh(map, 1);
-
-        //for (int i = 0; i < meshMap.Length; i++)
-        //{
-        //    meshMap[i].GenerateMesh(map, i ,1);
-        //}
-        //UpdateMeshes();
     }
-    void UpdateMeshes()
+    void UpdateTerrain()
     {
-        foreach (Transform child in transform)
+        float[,] height_map = new float[width,length];
+        for (int x = 0; x < width; x++)
         {
-            if (child.GetComponent<MeshGenOne>() != null)
+            for (int y = 0; y < length; y++)
             {
-                MeshGenOne meshGen = child.GetComponent<MeshGenOne>();
-                meshGen.GenerateMesh(map, 1);
+                height_map[x, y] = (map[x, y]+20)/64;
             }
         }
+        TD.SetHeights(0, 0, height_map);
+
     }
+
     void BlastRandomHoles(int count)
     {
         while (count > 0)
         {
             int radius = random.Next(3, 30);
-            BlastHole(random.Next(-radius, width+radius), random.Next(-radius, length+radius), radius, 0.5f);
+            BlastHole(random.Next(-radius, width + radius), random.Next(-radius, length + radius), radius, 0.5f);
             //BlastClean(random.Next(-radius, width + radius), random.Next(-radius, length + radius), radius, 0.5f);
             count--;
         }
@@ -145,15 +94,15 @@ public class mapGenerator : MonoBehaviour {
     void BlastHole(int x, int y, float radius, float depth)//subtracts from all area within the circle. explosion is a infinitely tall cone
     {
         int rad = (int)radius;
-        for (int i = Mathf.Max(x-rad, 0); i< Mathf.Min(x+rad, width); i++)//iterates through with i starting at 0 or greater
+        for (int i = Mathf.Max(x - rad, 0); i < Mathf.Min(x + rad, width); i++)//iterates through with i starting at 0 or greater
         {
-            for (int j = Mathf.Max(y -rad, 0); j < Mathf.Min(y + rad, length); j++)
+            for (int j = Mathf.Max(y - rad, 0); j < Mathf.Min(y + rad, length); j++)
             {   //distance from epicenter
                 float distance = Mathf.Sqrt(Mathf.Pow(Mathf.Abs(i - x), 2f) + Mathf.Pow(Mathf.Abs(j - y), 2f));
                 if (distance <= radius)
                 {
                     int destruction = (int)((radius - distance) * depth);
-                    map[i, j] -= destruction; 
+                    map[i, j] -= destruction;
                 }
 
             }
@@ -164,7 +113,7 @@ public class mapGenerator : MonoBehaviour {
         depth = depth * 3; //because i'm too lazy to change the code where it's called
         float blast_weight = .5f;   //how powerfully does the blast leave its particular shape?
         int rad = (int)radius;
-        int z;
+        float z;
         if (x >= 0 && x < width && y >= 0 && y < length)
         {
             z = map[x, y];
@@ -179,17 +128,17 @@ public class mapGenerator : MonoBehaviour {
                 {
                     int destruction = (int)((radius - distance) * depth);
                     if (map[i, j] > z - destruction)
-                        { map[i, j] = (int)Mathf.Lerp(z - destruction, map[i, j], blast_weight); } //interpolates between old height and blast shape height
+                    { map[i, j] = (int)Mathf.Lerp(z - destruction, map[i, j], blast_weight); } //interpolates between old height and blast shape height
                 }
 
             }
         }
     }
     void BlastClean(int x, int y, float radius, float depth)//leaves a hole with a sphere shape
-                                                             //simulation of a clean hole and then falling sand
+                                                            //simulation of a clean hole and then falling sand
     {
         int rad = (int)radius;
-        int z;
+        float z;
         if (x >= 0 && x < width && y >= 0 && y < length)
         {
             z = map[x, y];
@@ -202,10 +151,10 @@ public class mapGenerator : MonoBehaviour {
                 float distance = Mathf.Sqrt(Mathf.Pow(Mathf.Abs(i - x), 2f) + Mathf.Pow(Mathf.Abs(j - y), 2f));
                 if (distance <= radius)
                 {
-                    int destruction = (int)(Math.Sqrt((radius*radius - distance*distance)) * depth);//sphere rather than cone
-                    if (map[i, j] > z+destruction)
+                    int destruction = (int)(Math.Sqrt((radius * radius - distance * distance)) * depth);//sphere rather than cone
+                    if (map[i, j] > z + destruction)
                     {
-                        map[i, j] -= destruction*2;
+                        map[i, j] -= destruction * 2;
                     }
                     else if (map[i, j] > z - destruction)
                     { map[i, j] = z - destruction; }
@@ -215,16 +164,16 @@ public class mapGenerator : MonoBehaviour {
         }
     }
 
-    int WaterCount()    //count volume of water
+    float WaterCount()    //count volume of water
     {
-        int volume = 0;
+        float volume = 0;
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < length; y++)
             {
                 if (map[x, y] < 0)
                 {
-                    volume += -map[x,y];
+                    volume += -map[x, y];
                 }
             }
         }
@@ -259,17 +208,20 @@ public class mapGenerator : MonoBehaviour {
         }
     }
 
-    void RandomFillMap() {
+    void RandomFillMap()
+    {
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < length; y++) {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < length; y++)
+            {
                 //if (x == 0 || x == width - 1 || y == 0 || y == length - 1) {
-                   // map[x, y] = 1;
+                // map[x, y] = 1;
                 //} else {
-                    //map[x, y] = (pseudoRandom.Next(0, 100) < randomFillPercent) ? 1 : 0;
-                   map[x, y] = (random.Next(-10, 10));
-                   
-                
+                //map[x, y] = (pseudoRandom.Next(0, 100) < randomFillPercent) ? 1 : 0;
+                map[x, y] = (random.Next(-10, 10));
+
+
             }
         }
     }
@@ -286,9 +238,12 @@ public class mapGenerator : MonoBehaviour {
         }
     }
 
-    void SmoothMap() {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < length; y++) {
+    void SmoothMap()
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < length; y++)
+            {
                 int neighbourWallTiles = GetSurroundingWallCount(x, y);
                 if (neighbourWallTiles > 4)
                     map[x, y] = 1;
@@ -299,15 +254,22 @@ public class mapGenerator : MonoBehaviour {
         }
     }
 
-    int GetSurroundingWallCount(int gridX, int gridY) {
+    int GetSurroundingWallCount(int gridX, int gridY)
+    {
         int wallCount = 0;
-        for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++) {
-            for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY++) {
-                if (neighbourX >= 0 && neighbourX < width && neighbourY >= 0 && neighbourY < length) {
-                    if (neighbourX != gridX || neighbourY != gridY) {
-                        wallCount += map[neighbourX, neighbourY];
+        for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)
+        {
+            for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY++)
+            {
+                if (neighbourX >= 0 && neighbourX < width && neighbourY >= 0 && neighbourY < length)
+                {
+                    if (neighbourX != gridX || neighbourY != gridY)
+                    {
+                        //wallCount += map[neighbourX, neighbourY];
                     }
-                } else {
+                }
+                else
+                {
                     wallCount++;
                 }
             }
@@ -317,31 +279,35 @@ public class mapGenerator : MonoBehaviour {
     }
 
 
-    void OnDrawGizmos() {
-        if (map != null) {
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < length; y++) {
+    void OnDrawGizmos()
+    {
+        if (map != null)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < length; y++)
+                {
                     //Gizmos.color = (map[x, y] == 1) ? Color.black : Color.white;
-                    int height = map[x, y];
-                    float col = ((float)height + 10) / 15;
+                    float height = map[x, y];
+                    float col = (height + 10) / 15;
                     if (height < 0)
                     {
                         //Gizmos.color = Color.blue;
-                        Gizmos.color = new Color(col, 1 + (float)height / 15, 1f, .1f);
+                        Gizmos.color = new Color(col, 1 + height / 15, 1f, .1f);
                     }
                     else
                         //Gizmos.color = new Color(col, 1f, 0f, 1f);
-                        Gizmos.color = new Color((float)height / 5, 1f, 0f, .1f);
+                        Gizmos.color = new Color(height / 5, 1f, 0f, .1f);
                     //Vector3 pos = new Vector3(-width / 2 + x + .5f, height, -length / 2 + y + .5f);
                     //Gizmos.DrawCube(pos, Vector3.one);
-                    Vector3 pos = new Vector3(-width / 2 + x + .5f, height/2, -length / 2 + y + .5f);
+                    Vector3 pos = new Vector3(-width / 2 + x + .5f, height / 2, -length / 2 + y + .5f);
                     Vector3 scale = new Vector3(1, height, 1);
                     Gizmos.DrawCube(pos, scale);
                 }
             }
-            int me_z = map[bomber_x, bomber_y] + 1;
+            float me_z = map[bomber_x, bomber_y] + 1;
             Gizmos.color = Color.red;
-            Gizmos.DrawCube(new Vector3(-width / 2 + bomber_x + .5f, me_z, - length / 2 + bomber_y + .5f), Vector3.one);
+            Gizmos.DrawCube(new Vector3(-width / 2 + bomber_x + .5f, me_z, -length / 2 + bomber_y + .5f), Vector3.one);
         }
     }
 }
