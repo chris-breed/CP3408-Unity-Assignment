@@ -9,44 +9,26 @@ public class player1Script : Controller {
     public Rigidbody playerRB;
     float timer;
 
+    int player; //1
+
     //movement variables
-    float forwardSpeed;
-    float speedModifier;
-    float turnSpeed;
+    public float forwardSpeed;
+    public float speedModifier;
+    public float turnSpeed;
 
     //health variables
-    int health;
+    public int health;
 
     //weapon variable
-    int weaponType; //1 = cannon
-    int weaponShootSpeed;
-    int weaponDamage;
-  
+    public int weaponType; //1 = cannon
+    public int weaponShootSpeed;
+    public int playerDefaultDamage;
 
     float player1Forward;
     float player1Rotate;
 
-
-    void Awake () {
-        initMovementVariables();
-        initWeaponVariables();
-        initPlayerStatsVariables();
-	}
-
-    private void initWeaponVariables() {
-        weaponType = 1;
-        weaponShootSpeed = 2;
-        weaponDamage = 5;
-    }
-
-    private void initMovementVariables() {
-        forwardSpeed = 1;
-        speedModifier = 5;
-        turnSpeed = 5;
-    }
-
-    private void initPlayerStatsVariables() {
-        health = 100;
+    private void Awake() {
+        player = 1;
     }
 
     // Update is called once per frame
@@ -56,7 +38,9 @@ public class player1Script : Controller {
 		if(health <= 0) {
             death();
         }
+    }
 
+    void FixedUpdate() {
         player1Forward = Input.GetAxisRaw("Vertical");
         player1Rotate = Input.GetAxis("Horizontal");
 
@@ -65,13 +49,15 @@ public class player1Script : Controller {
         if (Input.GetKey(KeyCode.Space)) {
             if (timer >= weaponShootSpeed) {
                 timer = 0;
-                shootWeapon(weaponType, weaponDamage);
+                shootWeapon(player, weaponType, playerDefaultDamage);
             }
         }
     }
 
-    private new void death() {
-        //kill player
-        throw new NotImplementedException();
+    public void OnTriggerEnter(Collider other) {
+        if(other.gameObject.tag == "Projectile") {
+            int damageTaken = other.gameObject.GetComponent<CannonScript>().shotDamage;
+            takeDamage(damageTaken);
+        }
     }
 }
