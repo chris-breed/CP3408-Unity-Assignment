@@ -7,7 +7,8 @@ public class NPC : Controller
 {
 
     //misc variables
-    Rigidbody playerRB;
+    Rigidbody myRB;
+    Transform target;
     float timer;
 
     public int player = 3;
@@ -22,22 +23,29 @@ public class NPC : Controller
     public float weaponShootSpeed = 0.1f;
     public int weaponDamage = 1;
 
+    bool shooting = true;
+
     float playerForward;
     float turnInput;
-
+    System.Random random;
     void Awake()
     {
         die();
+        random = new System.Random();
+        playerScript[] players = FindObjectsOfType<playerScript>();
+        target = players[random.Next(players.Length)].GetComponent<Transform>();
     }
 
     void Update()
     {
-
-        playerForward = Input.GetAxisRaw(xInput);
-        turnInput = Input.GetAxis(zInput);
+        float distanceToPlayer = Vector3.Distance(transform.position, target.position);
+        playerForward = 1;
+        turnInput = 1;
+        turnInput = -1;
+        turnInput = 0;
         timer -= Time.deltaTime;
 
-        if (Input.GetKey(fireButton))
+        if (shooting)
         {
             if (timer < 0)
             {
@@ -45,7 +53,12 @@ public class NPC : Controller
                 shootWeapon(player);
             }
         }
-        if (Input.GetKey(changeWeaponButton))
+        if (activeWeapon == 1)
+        {
+            if (distanceToPlayer > 40)
+                switchWeapon();
+        }
+        else if (distanceToPlayer < 15)
         {
             switchWeapon();
         }

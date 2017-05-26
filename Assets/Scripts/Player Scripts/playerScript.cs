@@ -22,7 +22,6 @@ public class playerScript : Controller
 
     //weapon variable
     public int weaponType; //1 = gunn
-    public float weaponShootSpeed = 0.1f;
     public int weaponDamage = 1;
 
     float playerForward;
@@ -44,7 +43,10 @@ public class playerScript : Controller
         {
             if (timer < 0)
             {
-                timer += weaponShootSpeed;
+                if (activeWeapon == 1)
+                    timer += gun_fire_rate;
+                else
+                    timer += cannon_fire_rate;
                 shootWeapon(player);
             }
         }

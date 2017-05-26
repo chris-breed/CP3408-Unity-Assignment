@@ -19,12 +19,14 @@ public class Controller : MonoBehaviour {
     private int gridX, gridZ;
     private Rigidbody rigidBody;
     static mapGenerator mapMother;
-    int activeWeapon = 1;
+    public int activeWeapon = 1;
     //public CannonScript cannonScript;
     System.Random random = new System.Random();
+    public float cannon_fire_rate = 1.5f;
+    public float gun_fire_rate = .2f;
+
 
     private int health = 100;
-
     void Start()
     {
         mapMother = FindObjectOfType<mapGenerator>();
