@@ -13,6 +13,7 @@ public class MenuScript : MonoBehaviour {
 
     void Awake() {
         mainMenuCanvas.SetActive(true);
+        inGameHud.SetActive(false);
     }
 
     // Use this for initialization
@@ -22,6 +23,14 @@ public class MenuScript : MonoBehaviour {
         onePlayerGameButton.onClick.AddListener(start1PGame);
         Button twoPlayerGameButton = GameObject.Find("Play2PGame").GetComponent<Button>();
         twoPlayerGameButton.onClick.AddListener(startP2Game);
+
+        //InGameHud Variables
+        int player1Health;
+        int player2Health;
+    }
+
+    void Update() {
+
     }
 
     private void start1PGame() {
