@@ -8,11 +8,18 @@ public class Controller : MonoBehaviour {
     //prefabs for weapons
     public Transform firePoint;
     public int bullet_speed = 3000;
-    public float timeToBoom = .5f;
+    public int cannon_speed = 1000;
+    public int cannon_up = 1000;
+    public float timeToBoom_bullet = .5f;
+    public float timeToBoom_cannon = 2f;
     public GameObject cannonShot;
+    public GameObject bulletShot;
+    public float bullet_recoil = 50;
+    public float cannon_recoil = 800;
     private int gridX, gridZ;
     private Rigidbody rigidBody;
     static mapGenerator mapMother;
+    int activeWeapon = 1;
     //public CannonScript cannonScript;
     System.Random random = new System.Random();
 
@@ -22,6 +29,7 @@ public class Controller : MonoBehaviour {
     {
         mapMother = FindObjectOfType<mapGenerator>();
         rigidBody = GetComponent<Rigidbody>();
+        rigidBody.freezeRotation = true;
     }
     void Awake() {
         //cannonScript = GetComponent<CannonScript>();
@@ -38,19 +46,34 @@ public class Controller : MonoBehaviour {
         //rotation
         transform.RotateAround(transform.position, transform.up, Time.deltaTime * 90f * turnSpeed);
     }
-
-    public void shootWeapon(int player, int weaponType, int damage, int recoil_amount) {
-        switch (weaponType) {
-            case 1: //cannon
-                GameObject projectile = Instantiate(cannonShot, firePoint.transform.position, Quaternion.identity) as GameObject;
+    public void switchWeapon()
+    {
+        activeWeapon = (activeWeapon + 1) % 2;
+    }
+    public void shootWeapon(int player) {
+        GameObject projectile;
+        CannonScript script;
+        Vector3 recoil;
+        switch (activeWeapon) {
+            case 1: //fast small bullets
+            {
+                projectile = Instantiate(bulletShot, firePoint.transform.position, Quaternion.identity) as GameObject;
                 projectile.GetComponent<Rigidbody>().AddForce(transform.forward * bullet_speed);
-                CannonScript bulletScript = projectile.GetComponent<CannonScript>();
-                bulletScript.Invoke("Explode", timeToBoom);
-                bulletScript.damage = damage;
-                bulletScript.playerFired = player;
+                script  = projectile.GetComponent<CannonScript>();
+                script.Invoke("Explode", timeToBoom_bullet);
+                script.playerFired = player;
+                recoil = -transform.forward * bullet_recoil;
+                break;
+            }
+            default: //big cannonball
+                projectile = Instantiate(cannonShot, firePoint.transform.position, Quaternion.identity) as GameObject;
+                projectile.GetComponent<Rigidbody>().AddForce(transform.forward * cannon_speed+transform.up*cannon_up);
+                script = projectile.GetComponent<CannonScript>();
+                script.Invoke("Explode", timeToBoom_cannon);
+                script.playerFired = player;
+                recoil = -transform.forward * cannon_recoil;
                 break;
         }
-        Vector3 recoil = -transform.forward * recoil_amount;
         rigidBody.AddForce(recoil);
     }
 

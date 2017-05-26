@@ -8,6 +8,7 @@ public class playerScript : Controller
     public String xInput = "Vertical";
     public String zInput = "Horizontal";
     public KeyCode fireButton = KeyCode.Space;
+    public KeyCode changeWeaponButton = KeyCode.LeftShift;
     //misc variables
     Rigidbody playerRB;
     float timer;
@@ -21,8 +22,7 @@ public class playerScript : Controller
 
     //weapon variable
     public int weaponType; //1 = gunn
-    public int recoil = 100;
-    public double weaponShootSpeed = 0.1;
+    public float weaponShootSpeed = 0.1f;
     public int weaponDamage = 1;
 
     float playerForward;
@@ -38,15 +38,19 @@ public class playerScript : Controller
 
         playerForward = Input.GetAxisRaw(xInput);
         turnInput = Input.GetAxis(zInput);
-        timer += Time.deltaTime;
+        timer -= Time.deltaTime;
 
         if (Input.GetKey(fireButton))
         {
-            if (timer >= weaponShootSpeed)
+            if (timer < 0)
             {
-                timer = 0;
-                shootWeapon(player, weaponType, weaponDamage, recoil);
+                timer += weaponShootSpeed;
+                shootWeapon(player);
             }
+        }
+        if (Input.GetKey(changeWeaponButton))
+        {
+            switchWeapon();
         }
     }
 

@@ -195,10 +195,10 @@ public class mapGenerator : MonoBehaviour {
             }
         }
     }
-    public void BlowUp(int x, int y)
+    public void BlowUp(float x, float z, float h, float size)
     {
-        int h = 0;
-        BlastInAir(x, y, h, 7.5f, 1);
+        //BlastInAir(x, z, h, size, 1);
+        BlastPrecise(x, z, h, size, 1);
         updateWater();
     }
     void BlastClean(int x, int y, float radius, float depth)//leaves a hole with a sphere shape
@@ -249,6 +249,34 @@ public class mapGenerator : MonoBehaviour {
                     }
                     else if (map[i, j] > z - destruction)
                     { map[i, j] = z - destruction;
+                        primeChunk(i, j);
+                    }
+                }
+
+            }
+        }
+    }
+
+    void BlastPrecise(float x, float y, float z, float radius, float depth)//inputs floats
+                                                                   //
+    {
+        int rad = (int)radius;
+        for (int i = (int)Mathf.Max(x - rad, 0); i < Mathf.Min(x + rad, width); i++)//iterates through with i starting at 0 or greater
+        {
+            for (int j = (int)Mathf.Max(y - rad, 0); j < Mathf.Min(y + rad, length); j++)
+            {   //distance from epicenter
+                float distance = Mathf.Sqrt(Mathf.Pow(Mathf.Abs(i - x), 2f) + Mathf.Pow(Mathf.Abs(j - y), 2f));
+                if (distance <= radius)
+                {
+                    float destruction = Mathf.Sqrt(radius * radius - distance * distance) * depth;//sphere rather than cone
+                    if (map[i, j] > z + destruction)
+                    {
+                        map[i, j] -= (int)destruction * 2;
+                        primeChunk(i, j);
+                    }
+                    else if (map[i, j] > z - destruction)
+                    {
+                        map[i, j] = (int)(z - destruction);
                         primeChunk(i, j);
                     }
                 }

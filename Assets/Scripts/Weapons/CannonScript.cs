@@ -5,6 +5,7 @@ using UnityEngine;
 public class CannonScript : MonoBehaviour {
 
     public int damage = 2;
+    public int explosion_size = 10;
     //public int playerDamage;
     //public int shotDamage;
     public int playerFired;
@@ -22,7 +23,7 @@ public class CannonScript : MonoBehaviour {
     }
 
     void Explode() {
-        mapMother.BlowUp(gridX,gridZ);
+        mapMother.BlowUp(gridX,gridZ, transform.position.y/Metrics.scale, explosion_size);
         Destroy(gameObject);
     }
 
