@@ -22,8 +22,15 @@ public class Controller : MonoBehaviour {
     public int activeWeapon = 1;
     //public CannonScript cannonScript;
     System.Random random = new System.Random();
+
     public float cannon_fire_rate = 1.5f;
     public float gun_fire_rate = .2f;
+    private int health = 100;
+    private int lives = 1;
+    MenuScript menuScript;
+
+
+    public GameObject explosionprefab;
 
 
     private int health = 100;
