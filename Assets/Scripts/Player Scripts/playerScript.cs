@@ -28,7 +28,11 @@ public class playerScript : Controller
     float playerForward;
     float turnInput;
 
-    // Update is called once per frame
+    void Awake()
+    {
+        die();
+    }
+
     void Update()
     {
 
