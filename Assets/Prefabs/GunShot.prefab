@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 54883639561639242}
   - component: {fileID: 114219117004442926}
   m_Layer: 0
-  m_Name: cannonShot
+  m_Name: GunShot
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -141,6 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 2
+  explosion_size: 10
   playerFired: 0
 --- !u!135 &135652752241973422
 SphereCollider:
