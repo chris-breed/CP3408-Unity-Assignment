@@ -32,8 +32,6 @@ public class Controller : MonoBehaviour {
 
     public GameObject explosionprefab;
 
-
-    private int health = 100;
     void Start()
     {
         mapMother = FindObjectOfType<mapGenerator>();

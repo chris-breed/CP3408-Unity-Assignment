@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewSize: 2
-  minHeight: 10
+  minHeight: 5
   camSpeed: 0.1
   player1: {fileID: 60467073}
   player2: {fileID: 1595919764}
@@ -324,10 +324,12 @@ MonoBehaviour:
   cannonShot: {fileID: 1339069004542606, guid: 1b69a58f0a80d724895d9956bc32b075, type: 2}
   bulletShot: {fileID: 1688635104922570, guid: 0ef8ca7687b307e4dbd289501e4fb678, type: 2}
   bullet_recoil: 50
-  cannon_recoil: 400
+  cannon_recoil: 800
   activeWeapon: 1
   cannon_fire_rate: 1.5
   gun_fire_rate: 0.2
+  explosionprefab: {fileID: 1317985193583822, guid: 549f65cc0d2aace42b5debd52cad422c,
+    type: 2}
   xInput: Vertical
   zInput: Horizontal
   fireButton: 32
@@ -335,7 +337,7 @@ MonoBehaviour:
   player: 1
   turnSpeed: 5
   speed: 20
-  weaponType: 1
+  weaponType: 0
   weaponDamage: 1
 --- !u!136 &60467075
 CapsuleCollider:
@@ -1553,18 +1555,20 @@ MonoBehaviour:
   cannonShot: {fileID: 1339069004542606, guid: 1b69a58f0a80d724895d9956bc32b075, type: 2}
   bulletShot: {fileID: 1688635104922570, guid: 0ef8ca7687b307e4dbd289501e4fb678, type: 2}
   bullet_recoil: 50
-  cannon_recoil: 400
+  cannon_recoil: 800
   activeWeapon: 1
   cannon_fire_rate: 1.5
   gun_fire_rate: 0.2
+  explosionprefab: {fileID: 1317985193583822, guid: 549f65cc0d2aace42b5debd52cad422c,
+    type: 2}
   xInput: P2_Vertical
   zInput: P2_Horizontal
   fireButton: 305
   changeWeaponButton: 303
-  player: 2
+  player: 1
   turnSpeed: 5
   speed: 20
-  weaponType: 1
+  weaponType: 0
   weaponDamage: 1
 --- !u!1 &1827118457
 GameObject:

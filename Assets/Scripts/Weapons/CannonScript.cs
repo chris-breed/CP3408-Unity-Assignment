@@ -15,8 +15,10 @@ public class CannonScript : MonoBehaviour {
     int gridX;
     int gridZ;
     static mapGenerator mapMother;
+    Controller controller;
 	void Start () {
         mapMother = FindObjectOfType<mapGenerator>();
+        controller = FindObjectOfType<Controller>();
     }
 
     public void setPlayerAndDamage(int player, int pDamage) {
