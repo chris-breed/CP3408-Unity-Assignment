@@ -5,17 +5,16 @@ using UnityEngine;
 public class CannonScript : MonoBehaviour {
 
     public int damage = 2;
-    public int explosion_size = 10;
+    public float explosion_size = 10;
     //public int playerDamage;
     //public int shotDamage;
     public int playerFired;
+    public float initiallift = 0;
     int gridX;
     int gridZ;
     static mapGenerator mapMother;
-    Controller controller;
 	void Start () {
         mapMother = FindObjectOfType<mapGenerator>();
-        controller = FindObjectOfType<Controller>();
     }
 
     public void setPlayerAndDamage(int player, int pDamage) {
@@ -26,7 +25,6 @@ public class CannonScript : MonoBehaviour {
 
     void Explode() {
         mapMother.BlowUp(gridX,gridZ, transform.position.y/Metrics.scale, explosion_size);
-        controller.takeDamage(damage);
         Destroy(gameObject);
     }
 
