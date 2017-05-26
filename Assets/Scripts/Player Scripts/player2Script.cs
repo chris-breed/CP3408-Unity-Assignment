@@ -36,7 +36,7 @@ public class player2Script : Controller {
         timer += Time.deltaTime;
 
         if (health <= 0) {
-            death();
+            die();
         }
     }
 

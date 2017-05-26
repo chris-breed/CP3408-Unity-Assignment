@@ -23,4 +23,10 @@ public class Metrics : MonoBehaviour {
     {
         return chunkCountX * chunkCountZ;
     }
+    //public static float width() {
+    //    return chunkSizeX * chunkCountX * scale;
+    //}
+    //public static int height() {
+    //    return chunkSizeX * chunkCountX * scale;
+    //}
 }

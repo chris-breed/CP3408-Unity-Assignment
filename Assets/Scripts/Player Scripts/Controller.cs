@@ -10,9 +10,15 @@ public class Controller : MonoBehaviour {
     public int bullet_speed = 3000;
     public float bullet_time = .5f;
     public GameObject cannonShot;
-
+    private int gridX, gridZ;
+    static mapGenerator mapMother;
     public CannonScript cannonScript;
+    System.Random random = new System.Random();
 
+    void Start()
+    {
+        mapMother = FindObjectOfType<mapGenerator>();
+    }
     void Awake() {
         cannonScript = GetComponent<CannonScript>();
     }
@@ -45,19 +51,34 @@ public class Controller : MonoBehaviour {
         }
     }
 
+    void Update()
+    {
+        gridX = (int)Mathf.Round(transform.position.x / Metrics.scale);
+        gridZ = (int)Mathf.Round(transform.position.z / Metrics.scale);
+        if (gridX >= Metrics.xBlocks() || gridX < 0 || gridZ >= Metrics.zBlocks() || gridZ < 0)
+        {
+            die();
+        }
+        else if (mapMother.getHeight(gridX, gridZ) * Metrics.getVScale() > transform.position.y)
+        {
+            die();
+        }
+    }
+
 
     public void takeDamage(int otherPlayersShotDamage) {
 
     }
 
-    public void death() {
-        //kill player
-        /*
-         pause/stop game
-         decide winner (most kills, highest score, hit %, whatever)
-         show each players score
-         */
-        throw new NotImplementedException();
+    public void die() {
+ 
+         //pause/stop game
+         //decide winner (most kills, highest score, hit %, whatever)
+         //show each players score
 
+        transform.position = new Vector3(random.Next(Metrics.xBlocks()), 0, random.Next(Metrics.zBlocks())) * Metrics.scale;
+        Debug.Log("Death x.x");
+        //health = 100;
+        //throw new NotImplementedException();
     }
 }

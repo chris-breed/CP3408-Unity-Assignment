@@ -296,7 +296,7 @@ MonoBehaviour:
   firePoint: {fileID: 73825144}
   bullet_speed: 3000
   bullet_time: 0.5
-  cannonShot: {fileID: 1688635104922570, guid: 0ef8ca7687b307e4dbd289501e4fb678, type: 2}
+  cannonShot: {fileID: 1999848656877072, guid: 3a7e2824ff5f70747844a1aa86583aef, type: 2}
   cannonScript: {fileID: 0}
   playerRB: {fileID: 60467069}
   forwardSpeed: 1
@@ -508,6 +508,53 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1001 &601960799
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4576403425165842, guid: 3a7e2824ff5f70747844a1aa86583aef, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576403425165842, guid: 3a7e2824ff5f70747844a1aa86583aef, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576403425165842, guid: 3a7e2824ff5f70747844a1aa86583aef, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576403425165842, guid: 3a7e2824ff5f70747844a1aa86583aef, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576403425165842, guid: 3a7e2824ff5f70747844a1aa86583aef, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576403425165842, guid: 3a7e2824ff5f70747844a1aa86583aef, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576403425165842, guid: 3a7e2824ff5f70747844a1aa86583aef, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576403425165842, guid: 3a7e2824ff5f70747844a1aa86583aef, type: 2}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 54025844916949888, guid: 3a7e2824ff5f70747844a1aa86583aef,
+        type: 2}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 3a7e2824ff5f70747844a1aa86583aef, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &759194988
 GameObject:
   m_ObjectHideFlags: 0

@@ -33,10 +33,11 @@ public class player1Script : Controller {
 
     // Update is called once per frame
     void Update () {
+        //Debug.Log("grid position " + gridX + " " + gridZ);
         timer += Time.deltaTime;
 
 		if(health <= 0) {
-            death();
+            die();
         }
     }
 
