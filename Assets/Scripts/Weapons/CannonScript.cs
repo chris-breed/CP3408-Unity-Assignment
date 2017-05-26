@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CannonScript : MonoBehaviour {
 
     public int damage = 2;
+    public int explosion_size = 10;
     //public int playerDamage;
     //public int shotDamage;
     public int playerFired;
@@ -25,9 +27,13 @@ public class CannonScript : MonoBehaviour {
     }
 
     void Explode() {
+        Vector3 explosionPoint = transform.position;
         //Debug.Log(damage);
-        mapMother.BlowUp(gridX, gridZ);
+
         //controller.takeDamage(damage);
+
+        mapMother.BlowUp(gridX, gridZ, transform.position.y / Metrics.scale, explosion_size);
+        Instantiate(controller.explosionprefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 

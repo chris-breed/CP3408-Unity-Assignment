@@ -17,8 +17,10 @@ public class Controller : MonoBehaviour {
     System.Random random = new System.Random();
 
     private int health = 100;
-    private int lives = 3;
+    private int lives = 1;
     MenuScript menuScript;
+
+    public GameObject explosionprefab;
 
 
     void Start()

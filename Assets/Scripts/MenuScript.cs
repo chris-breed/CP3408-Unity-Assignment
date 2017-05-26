@@ -34,7 +34,7 @@ public class MenuScript : MonoBehaviour {
   
 
     public void endGame() {
-        
+        winScreen.SetActive(true);
     }
 
     private void start1PGame() {
