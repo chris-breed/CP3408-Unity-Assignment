@@ -57,9 +57,10 @@ public class Controller : MonoBehaviour {
     {
         gridX = (int)Mathf.Round(transform.position.x / Metrics.scale);
         gridZ = (int)Mathf.Round(transform.position.z / Metrics.scale);
-        if (bounce(transform.position.x, transform.position.z))
+        if (gridX >= Metrics.xBlocks() || gridX < 0 || gridZ >= Metrics.zBlocks() || gridZ < 0)
         {
             return;
+            //die();
         }
         else if (mapMother.getHeight(gridX, gridZ) * Metrics.getVScale() > transform.position.y)
         {

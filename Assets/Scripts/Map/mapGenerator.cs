@@ -9,7 +9,7 @@ public class mapGenerator : MonoBehaviour {
     private int width;
     private int length;
 
-    public int start_pits = 20;
+    public int holes_per_chunk = 20;
     //GridMesh mesh;
     public int average_depth = 3;
 
@@ -17,6 +17,7 @@ public class mapGenerator : MonoBehaviour {
     public float water_surface_percent = 0.71f;
 
     public GridChunk chunkPrefab;
+    public PhysicMaterial wallMaterial;
     //public Transform chunkPrefab;
 
     int[,] map;
@@ -118,7 +119,7 @@ public class mapGenerator : MonoBehaviour {
     {
         map = new int[width, length];
         //RandomFillMap();
-        BlastRandomHoles(start_pits);
+        BlastRandomHoles(holes_per_chunk*Metrics.chunkCount());
         updateWater();
         //mesh.Triangulate(map);
         //MeshGenAll meshGen = GetComponent<MeshGenAll>();
@@ -333,19 +334,6 @@ public class mapGenerator : MonoBehaviour {
         }
     }
 
-    void SmoothMap() {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < length; y++) {
-                int neighbourWallTiles = GetSurroundingWallCount(x, y);
-                if (neighbourWallTiles > 4)
-                    map[x, y] = 1;
-                else if (neighbourWallTiles < 4)
-                    map[x, y] = 0;
-
-            }
-        }
-    }
-
     int GetSurroundingWallCount(int gridX, int gridY) {
         int wallCount = 0;
         for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++) {
@@ -365,14 +353,24 @@ public class mapGenerator : MonoBehaviour {
 
     void makeBarriers()
     {
+        float width = Metrics.xBlocks() * Metrics.scale;
+        float length = Metrics.zBlocks() * Metrics.scale;
+        Vector3 colliderBox = new Vector3(width, 5, length);
+        Vector3 center = new Vector3(colliderBox.x / 2, 0, colliderBox.z / 2);
+        addWall(new Vector3(width/2, 0, -length / 2), colliderBox);
+        addWall(new Vector3(-width / 2, 0, length / 2), colliderBox);
+        addWall(new Vector3(width / 2, 0, 3 * length / 2), colliderBox);
+        addWall(new Vector3( 3 * width / 2, 0, length / 2), colliderBox);
+
+    }
+    void addWall(Vector3 center, Vector3 size)
+    {
         GameObject baby = new GameObject("Wall");
         baby.transform.parent = transform;
         BoxCollider collider = baby.gameObject.AddComponent<BoxCollider>();
-        Vector3 colliderBox = new Vector3(Metrics.xBlocks(), 5, Metrics.zBlocks()) * Metrics.scale;
-        collider.center = new Vector3(colliderBox.x / 2, 0, colliderBox.z / 2);
-        collider.size = -colliderBox;
-        collider.isTrigger = true;
-
+        collider.center = center;
+        collider.size = size;
+        collider.material = wallMaterial;
     }
 
     public int getHeight(int x, int z)
