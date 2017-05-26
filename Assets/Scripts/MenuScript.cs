@@ -11,6 +11,10 @@ public class MenuScript : MonoBehaviour {
     public GameObject mainMenuCanvas;
     public GameObject inGameHud;
 
+    void Awake() {
+        mainMenuCanvas.SetActive(true);
+    }
+
     // Use this for initialization
     void Start() {
         //Menu Variables

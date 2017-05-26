@@ -12,10 +12,11 @@ public class Controller : MonoBehaviour {
     public GameObject cannonShot;
     private int gridX, gridZ;
     private Rigidbody rigidBody;
-    private int health = 100;
     static mapGenerator mapMother;
     //public CannonScript cannonScript;
     System.Random random = new System.Random();
+
+    private int health = 100;
 
     void Start()
     {
@@ -101,6 +102,7 @@ public class Controller : MonoBehaviour {
         {
             int damageTaken = other.gameObject.GetComponent<CannonScript>().damage;
             takeDamage(damageTaken);
+            Debug.Log(damageTaken);
         }
     }
 
@@ -111,7 +113,7 @@ public class Controller : MonoBehaviour {
          //show each players score
 
         transform.position = new Vector3(random.Next(Metrics.xBlocks()), 0, random.Next(Metrics.zBlocks())) * Metrics.scale;
-        Debug.Log("Death x.x");
+        //Debug.Log("Death x.x");
         health = 100;
         //throw new NotImplementedException();
     }
