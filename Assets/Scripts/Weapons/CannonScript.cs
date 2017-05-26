@@ -11,8 +11,10 @@ public class CannonScript : MonoBehaviour {
     int gridX;
     int gridZ;
     static mapGenerator mapMother;
+    Controller controller;
 	void Start () {
         mapMother = FindObjectOfType<mapGenerator>();
+        controller = FindObjectOfType<Controller>();
     }
 
     public void setPlayerAndDamage(int player, int pDamage) {
@@ -23,6 +25,7 @@ public class CannonScript : MonoBehaviour {
 
     void Explode() {
         mapMother.BlowUp(gridX,gridZ);
+        controller.takeDamage(damage);
         Destroy(gameObject);
     }
 
