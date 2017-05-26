@@ -39,7 +39,7 @@ public class Controller : MonoBehaviour {
 
     public void shootWeapon(int player, int weaponType, int damage) {
         switch (weaponType) {
-            case 1:
+            case 1: //cannon
                 GameObject projectile = Instantiate(cannonShot, firePoint.transform.position, Quaternion.identity) as GameObject;
                 projectile.GetComponent<Rigidbody>().AddForce(transform.forward * bullet_speed);
                 CannonScript bulletScript = projectile.GetComponent<CannonScript>();
