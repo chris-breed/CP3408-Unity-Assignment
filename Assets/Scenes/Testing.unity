@@ -209,12 +209,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2926014312c80a14d87e6128f28fc6f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewSize: 5
+  viewSize: 3
+  minHeight: 100
   player1: {fileID: 60467073}
   player2: {fileID: 1595919764}
-  distance: 0
-  newCameraHeight: 0
-  maxCameraHeight: 200
 --- !u!1 &60467068
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +225,7 @@ GameObject:
   - component: {fileID: 60467070}
   - component: {fileID: 60467069}
   - component: {fileID: 60467075}
-  - component: {fileID: 60467071}
+  - component: {fileID: 60467074}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -282,30 +280,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &60467071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 60467068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc85b1d7cfddbe742bb37b3dd046f6e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  firePoint: {fileID: 73825144}
-  bullet_speed: 3000
-  bullet_time: 0.5
-  cannonShot: {fileID: 1999848656877072, guid: 3a7e2824ff5f70747844a1aa86583aef, type: 2}
-  cannonScript: {fileID: 0}
-  playerRB: {fileID: 60467069}
-  forwardSpeed: 1
-  speedModifier: 5
-  turnSpeed: 5
-  health: 100
-  weaponType: 1
-  weaponShootSpeed: 1
-  weaponDamage: 0
 --- !u!33 &60467072
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -328,6 +302,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &60467074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 60467068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2a2d15f9f80474a945e4488cffbada, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePoint: {fileID: 73825144}
+  bullet_speed: 3000
+  timeToBoom: 0.5
+  cannonShot: {fileID: 1688635104922570, guid: 0ef8ca7687b307e4dbd289501e4fb678, type: 2}
+  xInput: Vertical
+  zInput: Horizontal
+  fireButton: 32
+  player: 2
+  turnSpeed: 5
+  speed: 20
+  weaponType: 1
+  recoil: 100
+  weaponShootSpeed: 0.1
+  weaponDamage: 0
 --- !u!136 &60467075
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -401,7 +400,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000030517578, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &296369312
@@ -876,7 +875,7 @@ GameObject:
   - component: {fileID: 1595919761}
   - component: {fileID: 1595919760}
   - component: {fileID: 1595919762}
-  - component: {fileID: 1595919759}
+  - component: {fileID: 1595919765}
   m_Layer: 0
   m_Name: Player2
   m_TagString: Player2
@@ -884,30 +883,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1595919759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1595919758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dca6012022f33246b27c1d3ab9fc0e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  firePoint: {fileID: 1014030757}
-  bullet_speed: 3000
-  bullet_time: 0.5
-  cannonShot: {fileID: 1688635104922570, guid: 0ef8ca7687b307e4dbd289501e4fb678, type: 2}
-  cannonScript: {fileID: 0}
-  playerRB: {fileID: 1595919760}
-  forwardSpeed: 1
-  speedModifier: 5
-  turnSpeed: 5
-  health: 100
-  weaponType: 1
-  weaponShootSpeed: 2
-  weaponDamage: 0
 --- !u!54 &1595919760
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -916,7 +891,7 @@ Rigidbody:
   m_GameObject: {fileID: 1595919758}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 1.4
   m_AngularDrag: Infinity
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -990,6 +965,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &1595919765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1595919758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2a2d15f9f80474a945e4488cffbada, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePoint: {fileID: 1014030757}
+  bullet_speed: 3000
+  timeToBoom: 0.5
+  cannonShot: {fileID: 1688635104922570, guid: 0ef8ca7687b307e4dbd289501e4fb678, type: 2}
+  xInput: P2_Vertical
+  zInput: P2_Horizontal
+  fireButton: 305
+  player: 2
+  turnSpeed: 5
+  speed: 20
+  weaponType: 1
+  recoil: 100
+  weaponShootSpeed: 0.1
+  weaponDamage: 0
 --- !u!1 &1827118457
 GameObject:
   m_ObjectHideFlags: 0

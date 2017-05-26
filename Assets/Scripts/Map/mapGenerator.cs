@@ -46,6 +46,7 @@ public class mapGenerator : MonoBehaviour {
         //mesh = GetComponentInChildren<GridMesh>();
         CreateChunks();
         GenerateMap();
+        makeBarriers();
     }
 
     void CreateChunks()
@@ -360,6 +361,18 @@ public class mapGenerator : MonoBehaviour {
         }
 
         return wallCount;
+    }
+
+    void makeBarriers()
+    {
+        GameObject baby = new GameObject("Wall");
+        baby.transform.parent = transform;
+        BoxCollider collider = baby.gameObject.AddComponent<BoxCollider>();
+        Vector3 colliderBox = new Vector3(Metrics.xBlocks(), 5, Metrics.zBlocks()) * Metrics.scale;
+        collider.center = new Vector3(colliderBox.x / 2, 0, colliderBox.z / 2);
+        collider.size = -colliderBox;
+        collider.isTrigger = true;
+
     }
 
     public int getHeight(int x, int z)

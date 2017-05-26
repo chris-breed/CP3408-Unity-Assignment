@@ -5,24 +5,19 @@ using UnityEngine;
 
 public class camFollow : MonoBehaviour {
 
-    public float viewSize;
+    public float viewSize = 3;
+    public float minHeight = 5;
+    [Range(0, 1)]
+    public float camSpeed = .1f;
 
     public Transform player1;
     public Transform player2;
 
-    float cameraHeight = 30f;
-    Vector3 pivotPoint; //should be center of both players
-
-    Vector3 player1Pos;
-    Vector3 player2Pos;
-
     Vector3 offset;
+    public float distance;
 
     Vector3 centreOfTwoPlayers;
-
-    public float distance;
-    public float newCameraHeight;
-    public float maxCameraHeight;
+    //public float maxCameraHeight;
 
     // Use this for initialization
     void Start() {
@@ -30,35 +25,26 @@ public class camFollow : MonoBehaviour {
 
     // Update is called once per frame
     void LateUpdate() {
-        player1Pos = player1.position;
-        player2Pos = player2.position;
-        pivotPoint = Vector3.Lerp(player1Pos, player2Pos, 0.5f);
-        distance = Vector3.Distance(player1Pos, player2Pos);
+        float center_x = Mathf.Lerp(player1.position.x, player2.position.x, 0.5f);
+        float center_z = Mathf.Lerp(player1.position.z, player2.position.z, 0.5f);
+        distance = Vector3.Distance(player1.position, player2.position);
 
-        Vector3 newCameraPosition = pivotPoint;
-        newCameraPosition.y = cameraHeight;
+        //newCameraPosition.y = cameraHeight;
+        //transform.position = newCameraPosition;
+
+        float goalHeight = distance * viewSize;
+        if (goalHeight < minHeight)
+        {
+            goalHeight = minHeight;
+        }
+
+        Vector3 goalPosition = new Vector3(center_x, goalHeight, center_z);
+        Vector3 newCameraPosition = Vector3.Lerp(transform.position, goalPosition, camSpeed);
+
+        //Camera.main.transform.position = newCameraPosition;
         transform.position = newCameraPosition;
-
-        adjustCameraHeight(distance);
-
-    }
-
-    private void adjustCameraHeight(float distance) {
-
-        if (distance <= 10) {
-            newCameraHeight = 30f;
-        }
-
-        if (distance >= 10) {
-            newCameraHeight = distance * viewSize;
-            if (newCameraHeight >= maxCameraHeight) {
-                newCameraHeight = maxCameraHeight;
-            }
-        }
-
-        
-
-        Camera.main.transform.position = new Vector3(transform.position.x, newCameraHeight, transform.position.z);
+        transform.LookAt(new Vector3(center_x, 0, center_z), Vector3.forward);
+        //Camera.main.transform.position = new Vector3(transform.position.x, camHeight, transform.position.z);
 
 
     }

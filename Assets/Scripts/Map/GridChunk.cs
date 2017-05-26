@@ -7,7 +7,7 @@ public class GridChunk : MonoBehaviour
     int[,] heights;
     int xsize, zsize;
     GridMesh mesh;
-    public bool needsUpdate;
+    public bool needsUpdate = true;
     void Awake()
     {
         xsize = Metrics.chunkSizeX;
@@ -26,6 +26,7 @@ public class GridChunk : MonoBehaviour
         //    }
         //}
         enabled = true;
+        removeColliders();
         mesh.Triangulate(map, x,z);
         for (int i = x * Metrics.chunkSizeX; i < (x+1) * Metrics.chunkSizeX; i++)
         {
@@ -53,6 +54,14 @@ public class GridChunk : MonoBehaviour
             SphereCollider collider = baby.gameObject.AddComponent<SphereCollider>();
             collider.center = new Vector3(i, 0, j) * Metrics.scale;
             collider.radius = Metrics.scale/2;
+        }
+    }
+    public void removeColliders()
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.name == "ColliderBaby")
+                Destroy(child.gameObject);
         }
     }
     public bool isBorder(int i, int j, int[,] cells)
