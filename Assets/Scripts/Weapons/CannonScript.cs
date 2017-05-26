@@ -12,9 +12,10 @@ public class CannonScript : MonoBehaviour {
     int gridZ;
     static mapGenerator mapMother;
     Controller controller;
-	void Start () {
+    void Start() {
         mapMother = FindObjectOfType<mapGenerator>();
         controller = FindObjectOfType<Controller>();
+
     }
 
     public void setPlayerAndDamage(int player, int pDamage) {
@@ -24,17 +25,17 @@ public class CannonScript : MonoBehaviour {
     }
 
     void Explode() {
-        mapMother.BlowUp(gridX,gridZ);
-        controller.takeDamage(damage);
+        //Debug.Log(damage);
+        mapMother.BlowUp(gridX, gridZ);
+        //controller.takeDamage(damage);
         Destroy(gameObject);
     }
 
-    void Update()
-    {
+    void Update() {
+
         gridX = (int)Mathf.Round(transform.position.x / Metrics.scale);
         gridZ = (int)Mathf.Round(transform.position.z / Metrics.scale);
-        if (gridX<Metrics.xBlocks() && gridX >= 0 && gridZ < Metrics.zBlocks() && gridZ >= 0 && mapMother.getHeight(gridX, gridZ) * Metrics.getVScale() > transform.position.y)
-        {
+        if (gridX < Metrics.xBlocks() && gridX >= 0 && gridZ < Metrics.zBlocks() && gridZ >= 0 && mapMother.getHeight(gridX, gridZ) * Metrics.getVScale() > transform.position.y) {
             Explode();
         }
 

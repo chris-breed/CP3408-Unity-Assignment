@@ -10,10 +10,12 @@ public class MenuScript : MonoBehaviour {
 
     public GameObject mainMenuCanvas;
     public GameObject inGameHud;
+    public GameObject winScreen;
 
     void Awake() {
         mainMenuCanvas.SetActive(true);
         inGameHud.SetActive(false);
+        winScreen.SetActive(false);
     }
 
     // Use this for initialization
@@ -29,8 +31,10 @@ public class MenuScript : MonoBehaviour {
         int player2Health;
     }
 
-    void Update() {
+  
 
+    public void endGame() {
+        
     }
 
     private void start1PGame() {

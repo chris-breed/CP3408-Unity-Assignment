@@ -17,9 +17,13 @@ public class Controller : MonoBehaviour {
     System.Random random = new System.Random();
 
     private int health = 100;
+    private int lives = 3;
+    MenuScript menuScript;
+
 
     void Start()
     {
+        menuScript = FindObjectOfType<MenuScript>();
         mapMother = FindObjectOfType<mapGenerator>();
         rigidBody = GetComponent<Rigidbody>();
     }
@@ -39,14 +43,13 @@ public class Controller : MonoBehaviour {
         transform.RotateAround(transform.position, transform.up, Time.deltaTime * 90f * turnSpeed);
     }
 
-    public void shootWeapon(int player, int weaponType, int damage, int recoil_amount) {
+    public void shootWeapon(int player, int weaponType,int recoil_amount) {
         switch (weaponType) {
             case 1: //cannon
                 GameObject projectile = Instantiate(cannonShot, firePoint.transform.position, Quaternion.identity) as GameObject;
                 projectile.GetComponent<Rigidbody>().AddForce(transform.forward * bullet_speed);
                 CannonScript bulletScript = projectile.GetComponent<CannonScript>();
                 bulletScript.Invoke("Explode", timeToBoom);
-                bulletScript.damage = damage;
                 bulletScript.playerFired = player;
                 break;
         }
@@ -92,8 +95,14 @@ public class Controller : MonoBehaviour {
 
     public void takeDamage(int damage) {
         health -= damage;
-        if (health <= 0)
+        Debug.Log(health + " " + lives);
+        if (health <= 0) {
             die();
+            lives -= 1;
+            if (lives == 0) {
+                menuScript.endGame();
+            }
+        }
     }
 
     public void OnTriggerEnter(Collider other)
@@ -102,7 +111,7 @@ public class Controller : MonoBehaviour {
         {
             int damageTaken = other.gameObject.GetComponent<CannonScript>().damage;
             takeDamage(damageTaken);
-            Debug.Log(damageTaken);
+            //Debug.Log(damageTaken);
         }
     }
 
