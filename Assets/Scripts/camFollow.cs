@@ -21,10 +21,21 @@ public class camFollow : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        transform.position = new Vector3(Metrics.xBlocks() * Metrics.scale / 2, transform.position.y, Metrics.zBlocks() * Metrics.scale / 2);
+    }
+
+    public void setPlayers(GameObject p1, GameObject p2)
+    {
+        player1 = p1.transform;
+        player2 = p2.transform;
     }
 
     // Update is called once per frame
     void LateUpdate() {
+        if (player1 == null || player2 == null)
+        {
+            return;
+        }
         float center_x = Mathf.Lerp(player1.position.x, player2.position.x, 0.5f);
         float center_z = Mathf.Lerp(player1.position.z, player2.position.z, 0.5f);
         distance = Vector3.Distance(player1.position, player2.position);

@@ -11,6 +11,10 @@ public class MenuScript : MonoBehaviour {
     public GameObject mainMenuCanvas;
     public GameObject inGameHud;
     public GameObject winScreen;
+    public GameObject player1;
+    public GameObject player2;
+    public GameObject NPC;
+    public camFollow cam;
 
     void Awake() {
         mainMenuCanvas.SetActive(true);
@@ -38,11 +42,15 @@ public class MenuScript : MonoBehaviour {
     }
 
     private void start1PGame() {
-        Debug.Log("get a friend");
+        //Debug.Log("get a friend");
+        mainMenuCanvas.SetActive(false);
+        inGameHud.SetActive(true);
+        cam.setPlayers(Instantiate(player1),(Instantiate(NPC)));
     }
 
     private void startP2Game() {
         //load testing scene
+        cam.setPlayers(Instantiate(player1), (Instantiate(player2)));
         mainMenuCanvas.SetActive(false);
         inGameHud.SetActive(true);
     }

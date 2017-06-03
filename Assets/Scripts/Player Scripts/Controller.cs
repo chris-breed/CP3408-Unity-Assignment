@@ -37,9 +37,7 @@ public class Controller : MonoBehaviour {
         mapMother = FindObjectOfType<mapGenerator>();
         rigidBody = GetComponent<Rigidbody>();
         rigidBody.freezeRotation = true;
-    }
-    void Awake() {
-        //cannonScript = GetComponent<CannonScript>();
+        die();
     }
 
     public void updateForwardAndRotation(float speed, float turnSpeed) {

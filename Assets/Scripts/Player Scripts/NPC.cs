@@ -31,7 +31,6 @@ public class NPC : Controller
     System.Random random;
     void Awake()
     {
-        die();
         random = new System.Random();
         playerScript[] players = FindObjectsOfType<playerScript>();
         target = players[random.Next(players.Length)].GetComponent<Transform>();
